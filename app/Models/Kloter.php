@@ -18,6 +18,8 @@ class Kloter extends Model
         'jumlah_dus2',
         'jumlah_dus3',
         'jumlah_box',
+        'jumlah_box12',
+        'jumlah_lilin',
     ];
 
     public function operasional()

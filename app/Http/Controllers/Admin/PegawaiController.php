@@ -39,8 +39,16 @@ class PegawaiController extends Controller
 
         $request->validate([
             'nama' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:pegawai,username',
+            'username' => 'required|string|max:255|unique:pegawais,username',
             'gaji_harian' => 'required|integer|min:0',
+            'tambahan_gaji_1' => 'nullable|integer|min:0',
+            'target_1' => 'nullable|integer|min:0',
+            'tambahan_gaji_2' => 'nullable|integer|min:0',
+            'target_2' => 'nullable|integer|min:0',
+            'tambahan_gaji_3' => 'nullable|integer|min:0',
+            'target_3' => 'nullable|integer|min:0',
+            'tambahan_gaji_4' => 'nullable|integer|min:0',
+            'target_4' => 'nullable|integer|min:0',
             'bonus_nominal' => 'required|integer|min:0',
             'bonus_syarat' => 'required|integer|min:0',
             'role' => 'required|in:pegawai', // Hanya pegawai, admin manual
@@ -64,8 +72,16 @@ class PegawaiController extends Controller
 
         $request->validate([
             'nama' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:pegawai,username,' . $id,
+            'username' => 'required|string|max:255|unique:pegawais,username,' . $id,
             'gaji_harian' => 'required|integer|min:0',
+            'tambahan_gaji_1' => 'nullable|integer|min:0',
+            'target_1' => 'nullable|integer|min:0',
+            'tambahan_gaji_2' => 'nullable|integer|min:0',
+            'target_2' => 'nullable|integer|min:0',
+            'tambahan_gaji_3' => 'nullable|integer|min:0',
+            'target_3' => 'nullable|integer|min:0',
+            'tambahan_gaji_4' => 'nullable|integer|min:0',
+            'target_4' => 'nullable|integer|min:0',
             'bonus_nominal' => 'required|integer|min:0',
             'bonus_syarat' => 'required|integer|min:0',
             'role' => 'required|in:pegawai',

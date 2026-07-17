@@ -1,0 +1,120 @@
+--- app/Http/Controllers/Pegawai/RekapController.php
++++ app/Http/Controllers/Pegawai/RekapController.php
+@@ -100,10 +100,30 @@
+-            $totalUangPenjualan = $transaksis->sum('total_harga');
+-
+-            // Hitung penggunaan stok kemasan
+-            $usedMika = $transaksis->sum(function ($t) {
+-                return $t->items->where('kemasan', 'mika')->sum('jumlah');
+-            });
+-            $usedDus1 = $transaksis->sum(function ($t) {
+-                return $t->items->where('kemasan', 'dus1')->sum('jumlah');
+-            });
+-            $usedDus2 = $transaksis->sum(function ($t) {
+-                return $t->items->where('kemasan', 'dus2')->sum('jumlah');
+-            });
+-            $usedDus3 = $transaksis->sum(function ($t) {
+-                return $t->items->where('kemasan', 'dus3')->sum('jumlah');
+-            });
+-            $usedBox = $transaksis->sum(function ($t) {
+-                return $t->items->where('kemasan', 'box')->sum('jumlah');
+-            });
+-
+-            $stokOutlet = StokOutlet::where('outlet_id', $request->outlet_id)->firstOrFail();
+-            $stokOutlet->update([
+-                'stok_mika' => $request->sisa_mika,
+-                'stok_dus1' => $request->sisa_dus1,
+-                'stok_dus2' => $request->sisa_dus2,
+-                'stok_dus3' => $request->sisa_dus3,
+-                'stok_box' => $request->sisa_box,
+-            ]);
+-
+-            $rekap = Rekap::create([
+-                'outlet_id' => $request->outlet_id,
+-                'operasional_id' => $request->operasional_id,
+-                'pegawai_id' => Session::get('user')->id,
+-                'total_donat_terjual' => $totalDonatTerjual,
+-                'sisa_mika' => $request->sisa_mika,
+-                'sisa_dus1' => $request->sisa_dus1,
+-                'sisa_dus2' => $request->sisa_dus2,
+-                'sisa_dus3' => $request->sisa_dus3,
+-                'sisa_box' => $request->sisa_box,
+-                'used_mika' => $usedMika,
+-                'used_dus1' => $usedDus1,
+-                'used_dus2' => $usedDus2,
+-                'used_dus3' => $usedDus3,
+-                'used_box' => $usedBox,
+-                'total_uang_penjualan' => $totalUangPenjualan,
+-                'total_uang' => $request->total_uang,
+-                'tanggal' => Carbon::today()->toDateString(),
+-                'status' => 'pending',
+-            ]);
++            $totalUangPenjualan = $transaksis->sum('total_harga');
++
++            // Hitung total uang per metode pembayaran
++            $totalTunai = $transaksis->where('metode_pembayaran', 'tunai')->sum('total_harga');
++            $totalQris = $transaksis->where('metode_pembayaran', 'qris')->sum('total_harga');
++            $totalTransfer = $transaksis->where('metode_pembayaran', 'transfer')->sum('total_harga');
++            $totalMaxim = $transaksis->where('metode_pembayaran', 'maxim')->sum('total_harga');
++            $totalGrabfood = $transaksis->where('metode_pembayaran', 'grabfood')->sum('total_harga');
++            $totalGofood = $transaksis->where('metode_pembayaran', 'gofood')->sum('total_harga');
++
++            // Hitung total pendapatan
++            $tempCatatan = Session::get('catatan_operasionals', []);
++            $totalPemasukan = array_sum(array_column(array_filter($tempCatatan, fn($c) => $c['jenis'] === 'pemasukan'), 'jumlah'));
++            $totalPengeluaran = array_sum(array_column(array_filter($tempCatatan, fn($c) => $c['jenis'] === 'pengeluaran'), 'jumlah'));
++            $totalPendapatan = $totalUangPenjualan + $totalPemasukan - $totalPengeluaran;
++
++            // Hitung penggunaan stok kemasan
++            $usedMika = $transaksis->sum(function ($t) {
++                return $t->items->where('kemasan', 'mika')->sum('jumlah');
++            });
++            $usedDus1 = $transaksis->sum(function ($t) {
++                return $t->items->where('kemasan', 'dus1')->sum('jumlah');
++            });
++            $usedDus2 = $transaksis->sum(function ($t) {
++                return $t->items->where('kemasan', 'dus2')->sum('jumlah');
++            });
++            $usedDus3 = $transaksis->sum(function ($t) {
++                return $t->items->where('kemasan', 'dus3')->sum('jumlah');
++            });
++            $usedBox = $transaksis->sum(function ($t) {
++                return $t->items->where('kemasan', 'box')->sum('jumlah');
++            });
++
++            $stokOutlet = StokOutlet::where('outlet_id', $request->outlet_id)->firstOrFail();
++            $stokOutlet->update([
++                'stok_mika' => $request->sisa_mika,
++                'stok_dus1' => $request->sisa_dus1,
++                'stok_dus2' => $request->sisa_dus2,
++                'stok_dus3' => $request->sisa_dus3,
++                'stok_box' => $request->sisa_box,
++            ]);
++
++            $rekap = Rekap::create([
++                'outlet_id' => $request->outlet_id,
++                'operasional_id' => $request->operasional_id,
++                'pegawai_id' => Session::get('user')->id,
++                'total_donat_terjual' => $totalDonatTerjual,
++                'sisa_mika' => $request->sisa_mika,
++                'sisa_dus1' => $request->sisa_dus1,
++                'sisa_dus2' => $request->sisa_dus2,
++                'sisa_dus3' => $request->sisa_dus3,
++                'sisa_box' => $request->sisa_box,
++                'used_mika' => $usedMika,
++                'used_dus1' => $usedDus1,
++                'used_dus2' => $usedDus2,
++                'used_dus3' => $usedDus3,
++                'used_box' => $usedBox,
++                'total_uang_penjualan' => $totalUangPenjualan,
++                'total_uang' => $request->total_uang,
++                'total_tunai' => $totalTunai,
++                'total_qris' => $totalQris,
++                'total_transfer' => $totalTransfer,
++                'total_maxim' => $totalMaxim,
++                'total_grabfood' => $totalGrabfood,
++                'total_gofood' => $totalGofood,
++                'total_pendapatan' => $totalPendapatan,
++                'tanggal' => Carbon::today()->toDateString(),
++                'status' => 'pending',
++            ]);

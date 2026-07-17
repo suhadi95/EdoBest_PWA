@@ -38,14 +38,16 @@ class HargaItemController extends Controller
             }
 
             $request->validate([
-                'harga_original' => 'required|numeric|min:0',
-                'harga_klasik' => 'required|numeric|min:0',
+                'harga_reguler' => 'required|numeric|min:0',
+                'harga_classic' => 'required|numeric|min:0',
+                'harga_costum' => 'required|numeric|min:0',
             ]);
 
             $hargaItem = HargaItem::findOrFail($id);
             $hargaItem->update([
-                'harga_original' => $request->harga_original,
-                'harga_klasik' => $request->harga_klasik,
+                'harga_reguler' => $request->harga_reguler,
+                'harga_classic' => $request->harga_classic,
+                'harga_costum' => $request->harga_costum,
             ]);
 
             Session::flash('success', 'Harga berhasil diupdate.');

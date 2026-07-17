@@ -20,9 +20,30 @@ class Rekap extends Model
         'sisa_dus2',
         'sisa_dus3',
         'sisa_box',
+        'sisa_box12',
+        'sisa_lilin',
+        'used_mika',
+        'used_dus1',
+        'used_dus2',
+        'used_dus3',
+        'used_box',
+        'used_box12',
+        'used_lilin',
+        'total_uang_penjualan',
         'total_uang',
+        'total_tunai',
+        'total_qris',
+        'total_transfer',
+        'total_maxim',
+        'total_grabfood',
+        'total_gofood',
+        'cash_di_pegawai',
         'tanggal',
         'status',
+    ];
+
+    protected $casts = [
+        'tanggal' => 'date',
     ];
 
     public function outlet()

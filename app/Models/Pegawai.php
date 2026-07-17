@@ -3,25 +3,44 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Pegawai extends Model
+class Pegawai extends Authenticatable
 {
-    use HasFactory;
-
-    protected $table = 'pegawais';
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'nama',
         'username',
+        'password',
+        'role',
         'gaji_harian',
+        'tambahan_gaji_1',
+        'target_1',
+        'tambahan_gaji_2',
+        'target_2',
+        'tambahan_gaji_3',
+        'target_3',
+        'tambahan_gaji_4',
+        'target_4',
         'bonus_nominal',
         'bonus_syarat',
-        'role',
+        'outlet_id',
     ];
 
-    public function outlets()
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function outlet()
     {
-        return $this->hasMany(Outlet::class, 'pegawai_id');
+        return $this->belongsTo(Outlet::class);
     }
 }

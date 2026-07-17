@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Outlet extends Model
 {
     protected $table = 'outlets';
-    protected $fillable = ['nama', 'alamat', 'pegawai_id'];
+    protected $fillable = ['nama', 'alamat'];
 
-    public function pegawai()
+    public function pegawais()
     {
-        return $this->belongsTo(Pegawai::class, 'pegawai_id');
+        return $this->hasMany(Pegawai::class);
     }
 
     public function operasionals()

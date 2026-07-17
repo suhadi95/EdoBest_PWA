@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('outlet_id')->constrained('outlets')->onDelete('cascade');
             $table->date('tanggal'); // Hari operasional
-            $table->enum('status', ['aktif', 'tutup'])->default('tutup');
+            $table->enum('status', ['aktif', 'tutup', 'selesai'])->default('tutup');
             $table->integer('total_donat_harian')->default(0); // Total donat dari kloter hari itu
             $table->timestamps();
         });

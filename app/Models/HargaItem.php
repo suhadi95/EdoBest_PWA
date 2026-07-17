@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class HargaItem extends Model
 {
     protected $table = 'harga_items';
-    protected $fillable = ['nama_item', 'harga_original', 'harga_klasik'];
+    protected $fillable = ['nama_item', 'harga_reguler', 'harga_classic', 'harga_costum'];
 }

@@ -53,6 +53,7 @@
                                 <th>No</th>
                                 <th>Nama Outlet</th>
                                 <th>Alamat</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -63,6 +64,29 @@
                                     <td>{{ $outlet_item->nama }}</td>
                                     <td>{{ $outlet_item->alamat }}</td>
                                     <td>
+                                        @php
+                                            $operasional = $outlet_item->operasionals->first();
+                                            if ($operasional) {
+                                                $rekap = $operasional->rekap;
+                                                if ($rekap && $rekap->status === 'validated') {
+                                                    $statusText = 'Selesai';
+                                                    $badgeClass = 'primary';
+                                                } else {
+                                                    $statusText = ucfirst($operasional->status);
+                                                    $badgeClass = $operasional->status === 'aktif' ? 'success' : 'danger';
+                                                }
+                                            } else {
+                                                $statusText = 'Tutup';
+                                                $badgeClass = 'danger';
+                                            }
+                                        @endphp
+                                        <span class="badge bg-{{ $badgeClass }}">{{ $statusText }}</span>
+                                        @if(isset($rekap))
+                                        @php $cashBrief = $rekap->cash_di_pegawai ?? ($rekap->total_tunai ?? 0); @endphp
+                                        <div class="small mt-1">Cash: Rp {{ number_format($cashBrief, 0, ',', '.') }}</div>
+                                        @endif
+                                    </td>
+                                    <td>
                                         <a href="{{ route('operasional.detail', $outlet_item->id) }}" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-eye"></i> Detail Operasional
                                         </a>
@@ -70,7 +94,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">Belum ada outlet.</td>
+                                    <td colspan="5" class="text-center">Belum ada outlet.</td>
                                 </tr>
                             @endforelse
                         </tbody>

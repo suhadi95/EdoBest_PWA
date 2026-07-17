@@ -6,23 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('catatan_operasionals', function (Blueprint $table) {
+        Schema::create('catatan_gaji', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('outlet_id')->constrained()->onDelete('cascade');
-            $table->foreignId('operasional_id')->constrained()->onDelete('cascade');
+            $table->foreignId('gaji_histori_id')->nullable()->constrained('gaji_histori')->onDelete('cascade');
             $table->foreignId('pegawai_id')->constrained()->onDelete('cascade');
-            $table->foreignId('rekap_id')->nullable()->constrained()->onDelete('cascade');
-            $table->enum('jenis', ['pemasukkan', 'pengeluaran']);
+            $table->enum('jenis', ['tambahan', 'pengurangan']);
             $table->bigInteger('jumlah');
             $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('catatan_operasionals');
+        Schema::dropIfExists('catatan_gaji');
     }
 };

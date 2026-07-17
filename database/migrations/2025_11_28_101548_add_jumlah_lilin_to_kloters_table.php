@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('rekaps', function (Blueprint $table) {
-            $table->enum('status', ['pending', 'validated'])->default('pending');
+        Schema::table('kloters', function (Blueprint $table) {
+            $table->integer('jumlah_lilin')->default(0)->after('jumlah_box');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('rekaps', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('kloters', function (Blueprint $table) {
+            $table->dropColumn('jumlah_lilin');
         });
     }
 };

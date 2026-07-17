@@ -17,9 +17,9 @@ class OutletController extends Controller
             return redirect()->route('login');
         }
 
-        $outlets = Outlet::with('pegawai')->get();
-        $pegawai = Pegawai::where('role', 'pegawai')->get();
-        return view('admin.kelola-outlet', compact('outlets', 'pegawai'));
+        $outlets = Outlet::with('pegawais')->get();
+        $pegawais = Pegawai::where('role', 'pegawai')->get();
+        return view('admin.kelola-outlet', compact('outlets', 'pegawais'));
     }
 
     public function store(Request $request)
@@ -32,25 +32,35 @@ class OutletController extends Controller
             $request->validate([
                 'nama' => 'required|string|max:255|unique:outlets,nama',
                 'alamat' => 'required|string',
-                'pegawai_id' => 'nullable|exists:pegawai,id',
+                'pegawai_ids' => 'nullable|array',
+                'pegawai_ids.*' => 'exists:pegawais,id',
             ]);
 
-            Outlet::create($request->all());
+            $outlet = Outlet::create([
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+            ]);
+
+            if ($request->pegawai_ids) {
+                Pegawai::whereIn('id', $request->pegawai_ids)->update(['outlet_id' => $outlet->id]);
+            }
 
             Session::flash('success', 'Outlet berhasil ditambahkan.');
             return response()->json(['success' => 'Outlet berhasil ditambahkan.']);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['error' => $e->errors()], 422);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Gagal menambahkan outlet'], 500);
+            return response()->json(['error' => 'Gagal menambahkan outlet: ' . $e->getMessage()], 500);
         }
     }
 
     public function edit($id)
     {
         try {
-            $outlet = Outlet::findOrFail($id);
-            return response()->json($outlet);
+            $outlet = Outlet::with('pegawais')->findOrFail($id);
+            $data = $outlet->toArray();
+            $data['pegawai_ids'] = $outlet->pegawais->pluck('id')->toArray();
+            return response()->json($data);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Data outlet tidak ditemukan'], 404);
         }
@@ -68,10 +78,17 @@ class OutletController extends Controller
             $request->validate([
                 'nama' => 'required|string|max:255|unique:outlets,nama,' . $id,
                 'alamat' => 'required|string',
-                'pegawai_id' => 'nullable|exists:pegawai,id',
+                'pegawai_ids' => 'nullable|array',
+                'pegawai_ids.*' => 'exists:pegawais,id',
             ]);
 
-            $outlet->update($request->all());
+            $outlet->update([
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+            ]);
+
+            Pegawai::whereIn('id', $request->pegawai_ids ?: [])->update(['outlet_id' => $outlet->id]);
+            Pegawai::whereNotIn('id', $request->pegawai_ids ?: [])->where('outlet_id', $outlet->id)->update(['outlet_id' => null]);
 
             Session::flash('success', 'Outlet berhasil diupdate.');
             return response()->json(['success' => 'Outlet berhasil diupdate.']);
@@ -90,6 +107,7 @@ class OutletController extends Controller
             }
 
             $outlet = Outlet::findOrFail($id);
+            Pegawai::where('outlet_id', $outlet->id)->update(['outlet_id' => null]);
             $outlet->delete();
 
             Session::flash('success', 'Outlet berhasil dihapus.');

@@ -17,6 +17,10 @@ class Operasional extends Model
         'total_donat_harian',
     ];
 
+    protected $dates = [
+        'tanggal',
+    ];
+
     public function outlet()
     {
         return $this->belongsTo(Outlet::class);
@@ -30,5 +34,10 @@ class Operasional extends Model
     public function rekap()
     {
         return $this->hasOne(Rekap::class);
+    }
+
+    public function transaksis()
+    {
+        return $this->hasMany(Transaksi::class);
     }
 }

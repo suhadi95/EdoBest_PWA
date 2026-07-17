@@ -17,6 +17,7 @@ class CatatanOperasional extends Model
         'jenis',
         'jumlah',
         'catatan',
+        'kategori_kemasan',
     ];
 
     public function outlet()
