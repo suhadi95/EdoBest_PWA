@@ -1,5 +1,5 @@
 /* EdoBest PWA Service Worker */
-const CACHE_VERSION = 'edobest-v2';
+const CACHE_VERSION = 'edobest-v3';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -12,19 +12,26 @@ const PRECACHE_URLS = [
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/apple-touch-icon.png',
-];
-
-const CDN_HOSTS = [
-  'cdn.jsdelivr.net',
-  'code.jquery.com',
-  'fonts.googleapis.com',
-  'fonts.gstatic.com',
+  '/assets/css/bootstrap.min.css',
+  '/assets/css/bootstrap-icons.min.css',
+  '/assets/fonts/bootstrap-icons.woff2',
+  '/assets/fonts/bootstrap-icons.woff',
+  '/assets/js/jquery-3.6.0.min.js',
+  '/assets/js/bootstrap.bundle.min.js',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .then((cache) =>
+        Promise.all(
+          PRECACHE_URLS.map((url) =>
+            cache.add(url).catch((err) => {
+              console.warn('Precache gagal:', url, err);
+            })
+          )
+        )
+      )
       .then(() => self.skipWaiting())
   );
 });
@@ -45,13 +52,38 @@ function isSameOrigin(url) {
   return url.origin === self.location.origin;
 }
 
-function isCdnRequest(url) {
-  return CDN_HOSTS.includes(url.hostname);
-}
-
 function isNavigationRequest(request) {
   return request.mode === 'navigate' ||
     (request.method === 'GET' && request.headers.get('accept')?.includes('text/html'));
+}
+
+function isStaticAsset(url) {
+  return url.pathname.startsWith('/assets/') ||
+    url.pathname.startsWith('/icons/') ||
+    url.pathname === '/manifest.webmanifest' ||
+    url.pathname === '/favicon.png' ||
+    url.pathname === '/favicon.ico' ||
+    url.pathname === '/logo.png' ||
+    url.pathname === '/offline.html' ||
+    url.pathname === '/sw.js';
+}
+
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const response = await fetch(request);
+    if (response && response.ok) {
+      const cache = await caches.open(STATIC_CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function networkFirst(request) {
@@ -102,40 +134,27 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
 
-  // Jangan cache request non-http(s) (chrome-extension, dll.)
   if (!url.protocol.startsWith('http')) {
     return;
   }
 
-  // Manifest & icon: cache-first via stale-while-revalidate
-  if (isSameOrigin(url) && (
-    url.pathname === '/manifest.webmanifest' ||
-    url.pathname.startsWith('/icons/') ||
-    url.pathname === '/favicon.png' ||
-    url.pathname === '/favicon.ico' ||
-    url.pathname === '/logo.png' ||
-    url.pathname === '/offline.html'
-  )) {
-    event.respondWith(staleWhileRevalidate(request));
+  if (!isSameOrigin(url)) {
     return;
   }
 
-  // CDN assets (Bootstrap, jQuery, fonts): stale-while-revalidate
-  if (isCdnRequest(url)) {
-    event.respondWith(staleWhileRevalidate(request));
+  // CSS/JS/font/icon: cache-first agar offline tetap rapi
+  if (isStaticAsset(url)) {
+    event.respondWith(cacheFirst(request));
     return;
   }
 
-  // Halaman HTML Laravel: network-first (data harus fresh), fallback offline
-  if (isSameOrigin(url) && isNavigationRequest(request)) {
+  // Halaman HTML Laravel: network-first, fallback cache/offline
+  if (isNavigationRequest(request)) {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  // Asset same-origin lainnya
-  if (isSameOrigin(url)) {
-    event.respondWith(staleWhileRevalidate(request));
-  }
+  event.respondWith(staleWhileRevalidate(request));
 });
 
 self.addEventListener('message', (event) => {
