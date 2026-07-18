@@ -82,12 +82,19 @@
         }
 
         .total-highlight {
-            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
-            color: #0c5460;
+            background: #eef6ff;
+            color: #1e40af;
+            border: 1px solid #dbeafe;
             padding: 1rem;
             border-radius: var(--border-radius-sm);
             text-align: center;
             margin: 1rem 0;
+        }
+
+        .total-highlight--muted {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid var(--border);
         }
 
         .total-amount {
@@ -356,16 +363,18 @@
 @endsection
 
 @section('back-button')
-    <a href="javascript:history.back()" class="btn btn-outline-secondary mb-3"><i class="bi bi-arrow-left"></i> Kembali</a>
+    <a href="javascript:history.back()" class="ui-back"><i class="bi bi-arrow-left"></i> Kembali</a>
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-file-text me-2"></i>Detail Rekap Harian - {{ $outlet->nama }}</h5>
-                    <p>Alamat: {{ $outlet->alamat }}</p>
+    <div class="ui-page ui-page--wide">
+        <header class="ui-header">
+            <div>
+                <h1>Detail Rekap Harian</h1>
+                <p>{{ $outlet->nama }} · {{ $outlet->alamat }}</p>
+            </div>
+        </header>
+
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
@@ -381,10 +390,11 @@
 
                     <!-- Rekap Belum Divalidasi -->
                     @if ($rekapsPending->count() > 0)
-                        <h6>Rekap Belum Divalidasi</h6>
+                        <section class="ui-section">
+                        <h2 class="ui-section__title">Rekap Belum Divalidasi</h2>
                         <div class="table-responsive">
                             <table class="table table-striped table-hover">
-                                <thead class="table-dark">
+                                <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
@@ -435,15 +445,16 @@
                                 </tbody>
                             </table>
                         </div>
+                        </section>
                     @else
-                        <p>Tidak ada rekap yang perlu divalidasi saat ini.</p>
+                        <p class="text-muted">Tidak ada rekap yang perlu divalidasi saat ini.</p>
                     @endif
 
-                    <!-- Histori Rekap Harian -->
-                    <h6>Histori Rekap Harian</h6>
+                    <section class="ui-section">
+                    <h2 class="ui-section__title">Histori Rekap Harian</h2>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
-                            <thead class="table-dark">
+                            <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Tanggal</th>
@@ -586,13 +597,11 @@
                             </small>
                         </div>
                     @endif
+                    </section>
 
-                    <a href="{{ route('admin.rekap.index') }}" class="btn btn-primary mt-3">
+                    <a href="{{ route('admin.rekap.index') }}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-arrow-left me-2"></i>Kembali ke Daftar Outlet
                     </a>
-                </div>
-            </div>
-        </div>
     </div>
 
 @endsection
@@ -1050,13 +1059,13 @@
                         </div>
 
                         <!-- Total Pendapatan Highlight -->
-                        <div class="total-highlight" style="background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); color: #0c5460;">
+                        <div class="total-highlight">
                             <div class="total-amount">
                                 Rp {{ number_format($rekap->total_uang ?? 0, 0, ',', '.') }}
                             </div>
                             <div class="total-label">Total Pendapatan Hari Ini</div>
                         </div>
-                        <div class="total-highlight" style="background: linear-gradient(135deg,rgb(126, 126, 126) 0%,rgb(126, 126, 126) 100%); color:rgb(255, 255, 255);">
+                        <div class="total-highlight total-highlight--muted">
                             @php $cashAdminBottom = $rekap->cash_di_pegawai ?? ($rekap->total_tunai ?? 0); @endphp
                             <div class="total-amount">
                                 Rp {{ number_format($cashAdminBottom, 0, ',', '.') }}

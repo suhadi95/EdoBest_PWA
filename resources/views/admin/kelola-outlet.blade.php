@@ -2,482 +2,17 @@
 
 @section('title', 'Kelola Outlet')
 
-@section('css')
-<style>
-    .page-header {
-        background: var(--primary-gradient);
-        color: white;
-        border-radius: var(--border-radius);
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        text-align: center;
-        box-shadow: var(--box-shadow);
-    }
-    
-    .page-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-    
-    .add-btn-card {
-        background: white;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-        margin-bottom: 2rem;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .add-btn-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    .add-btn {
-        width: 100%;
-        padding: 1.5rem;
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        color: white;
-        border: none;
-        border-radius: var(--border-radius);
-        font-weight: 600;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-    }
-    
-    .add-btn:hover {
-        color: white;
-        transform: translateY(-1px);
-        background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
-    }
-    
-    .outlet-card {
-        background: white;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-        margin-bottom: 1rem;
-        transition: all 0.3s ease;
-        border: none;
-        overflow: hidden;
-    }
-    
-    .outlet-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    .outlet-card .card-body {
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        min-height: 120px;
-    }
-    
-    .outlet-info {
-        flex: 1;
-        margin-right: 1rem;
-    }
-    
-    /* Memastikan layout horizontal di layar besar */
-    @media (min-width: 577px) {
-        .outlet-card .d-flex {
-            flex-direction: row;
-            align-items: stretch;
-            height: 100%;
-        }
-        
-        .outlet-info {
-            flex: 1;
-            margin-right: 1rem;
-        }
-        
-        .outlet-actions {
-            flex-direction: column;
-            align-items: stretch;
-            min-width: 120px;
-            justify-content: stretch;
-        }
-    }
-    
-    .outlet-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--dark-color);
-        margin-bottom: 0.5rem;
-    }
-    
-    .outlet-detail {
-        font-size: 0.9rem;
-        color: var(--secondary-color);
-        margin-bottom: 0.25rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .outlet-info-inline {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-    
-    .outlet-name-inline {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--dark-color);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
-    }
-    
-    .outlet-address-inline {
-        font-size: 0.9rem;
-        color: var(--secondary-color);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .pegawai-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.25rem;
-        align-items: center;
-    }
-    
-    .pegawai-badge {
-        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-        color: #856404;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        border: 1px solid #ffeaa7;
-    }
-    
-    .outlet-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        min-width: 120px;
-        width: 120px;
-        height: 100%;
-        align-items: stretch;
-        justify-content: stretch;
-    }
-    
-    .action-btn {
-        padding: 0.75rem 1rem;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        font-weight: 500;
-        border: none;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        flex: 1;
-        width: 100%;
-    }
-    
-    .action-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: var(--box-shadow-sm);
-    }
-    
-    .btn-edit {
-        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
-        color: white;
-    }
-    
-    .btn-edit:hover {
-        background: linear-gradient(135deg, #138496 0%, #0f6674 100%);
-        color: white;
-    }
-    
-    .btn-delete {
-        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-        color: white;
-    }
-    
-    .btn-delete:hover {
-        background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
-        color: white;
-    }
-    
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        background: white;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-    }
-    
-    .empty-state i {
-        font-size: 4rem;
-        color: var(--secondary-color);
-        margin-bottom: 1rem;
-    }
-    
-    .empty-state h6 {
-        color: var(--secondary-color);
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-    }
-    
-    .empty-state p {
-        color: var(--secondary-color);
-        margin: 0;
-        font-size: 0.9rem;
-    }
-    
-    @media (max-width: 768px) {
-        .page-header {
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .page-title {
-            font-size: 1.25rem;
-        }
-        
-        .add-btn {
-            padding: 1.25rem;
-            font-size: 1rem;
-        }
-        
-        .outlet-card .card-body {
-            padding: 1.25rem;
-        }
-        
-        .outlet-actions {
-            flex-direction: column;
-            width: 100px;
-            min-width: 100px;
-            justify-content: stretch;
-        }
-        
-        .action-btn {
-            flex: 1;
-            padding: 0.75rem 0.75rem;
-            font-size: 0.85rem;
-            width: 100%;
-        }
-        
-    }
-    
-    @media (max-width: 576px) {
-        .container-fluid {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-        }
-        
-        .page-header {
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .page-title {
-            font-size: 1.1rem;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-        
-        .add-btn {
-            padding: 1rem;
-            font-size: 0.95rem;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .add-btn i {
-            font-size: 1.25rem;
-        }
-        
-        .outlet-card .card-body {
-            padding: 1rem;
-        }
-        
-        /* Tetap horizontal di mobile */
-        .outlet-card .d-flex {
-            flex-direction: row;
-            align-items: stretch;
-            height: 100%;
-        }
-        
-        .outlet-info {
-            flex: 1;
-            margin-right: 0.5rem;
-        }
-        
-        .outlet-name-inline {
-            font-size: 0.95rem;
-        }
-        
-        .outlet-address-inline {
-            font-size: 0.8rem;
-        }
-        
-        .outlet-detail {
-            font-size: 0.8rem;
-        }
-        
-        .pegawai-badge {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.4rem;
-        }
-        
-        /* Tetap horizontal di layar sangat kecil */
-        .outlet-card .d-flex {
-            flex-direction: row;
-            align-items: stretch;
-            height: 100%;
-        }
-        
-        .outlet-actions {
-            flex-direction: column;
-            gap: 0.5rem;
-            width: 90px;
-            min-width: 90px;
-            align-items: stretch;
-            justify-content: stretch;
-        }
-        
-        .action-btn {
-            padding: 0.6rem 0.5rem;
-            font-size: 0.8rem;
-            flex: 1;
-            width: 100%;
-        }
-        
-        .action-btn span {
-            display: none;
-        }
-        
-        .action-btn i {
-            font-size: 0.9rem;
-        }
-        
-        .empty-state {
-            padding: 2rem 1rem;
-        }
-        
-        .empty-state i {
-            font-size: 2.5rem;
-        }
-        
-        .empty-state h6 {
-            font-size: 1rem;
-        }
-        
-        .empty-state p {
-            font-size: 0.85rem;
-        }
-        
-        /* Modal responsive */
-        .modal-dialog {
-            margin: 0.5rem;
-            max-width: calc(100% - 1rem);
-        }
-        
-        .modal-body textarea {
-            min-height: 80px;
-        }
-        
-        .modal-body .form-select[multiple] {
-            min-height: 120px;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        .page-header {
-            padding: 0.5rem;
-        }
-        
-        .page-title {
-            font-size: 1rem;
-        }
-        
-        .add-btn {
-            padding: 0.875rem;
-            font-size: 0.9rem;
-        }
-        
-        .outlet-card .card-body {
-            padding: 0.75rem;
-        }
-        
-        /* Tetap horizontal di layar sangat kecil */
-        .outlet-card .d-flex {
-            flex-direction: row;
-            align-items: stretch;
-            height: 100%;
-        }
-        
-        .outlet-info {
-            flex: 1;
-            margin-right: 0.25rem;
-        }
-        
-        .outlet-name-inline {
-            font-size: 0.9rem;
-        }
-        
-        .outlet-address-inline {
-            font-size: 0.75rem;
-        }
-        
-        .outlet-detail {
-            font-size: 0.75rem;
-        }
-        
-        .action-btn {
-            padding: 0.5rem 0.4rem;
-            font-size: 0.75rem;
-            flex: 1;
-            width: 100%;
-        }
-        
-        .pegawai-badge {
-            font-size: 0.6rem;
-            padding: 0.1rem 0.25rem;
-        }
-        
-        .outlet-actions {
-            width: 80px;
-            min-width: 80px;
-            justify-content: stretch;
-        }
-    }
-</style>
-@endsection
-
-@section('back-button')
-<a href="javascript:history.back()" class="btn btn-outline-secondary mb-3"><i class="bi bi-arrow-left"></i> Kembali</a>
-@endsection
-
 @section('content')
-<div class="container-fluid px-2 px-md-3">
-    <!-- Page Header -->
-    <div class="page-header">
-        <h1 class="page-title">
-            <i class="bi bi-shop-window"></i>
-            Kelola Outlet
-        </h1>
-    </div>
+<div class="ui-page">
+    <a href="javascript:history.back()" class="ui-back"><i class="bi bi-arrow-left"></i> Kembali</a>
 
-    <!-- Alert Messages -->
+    <header class="ui-header">
+        <div>
+            <h1>Kelola Outlet</h1>
+            <p>Tambah, edit, dan kelola data outlet</p>
+        </div>
+    </header>
+
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
@@ -485,71 +20,49 @@
         </div>
     @endif
 
-    <!-- Add Outlet Button -->
-    <div class="add-btn-card">
-        <button class="add-btn" data-bs-toggle="modal" data-bs-target="#outletModal" onclick="resetForm()">
-            <i class="bi bi-plus-circle" style="font-size: 1.5rem;"></i>
-            <span>Tambah Outlet Baru</span>
-        </button>
-    </div>
+    <button type="button" class="ui-primary" data-bs-toggle="modal" data-bs-target="#outletModal" onclick="resetForm()">
+        <div class="ui-primary__icon"><i class="bi bi-plus-lg"></i></div>
+        <div class="ui-primary__body">
+            <strong>Tambah Outlet</strong>
+            <span>Buat outlet baru</span>
+        </div>
+        <i class="bi bi-arrow-right"></i>
+    </button>
 
-    <!-- Outlet List -->
-    <div class="row">
+    <section class="ui-section">
+        <h2 class="ui-section__title">Daftar Outlet</h2>
         @forelse ($outlets as $outlet)
-            <div class="col-12">
-                <div class="outlet-card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="outlet-info">
-                                <div class="outlet-info-inline">
-                                <div class="outlet-name-inline">
-                                    <i class="bi bi-shop"></i>
-                                    {{ $outlet->nama }}
-                                </div>
-                                <div class="outlet-address-inline">
-                                    <i class="bi bi-geo-alt-fill"></i>
-                                    <span>{{ $outlet->alamat }}</span>
-                                </div>
-                                <div class="outlet-detail">
-                                    <i class="bi bi-people-fill"></i>
-                                    <div>
-                                        @if($outlet->pegawais->count() > 0)
-                                            <div class="pegawai-list">
-                                                @foreach($outlet->pegawais as $pegawai)
-                                                    <span class="pegawai-badge">{{ $pegawai->nama }}</span>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <span class="text-muted">Belum ada pegawai ditugaskan</span>
-                                        @endif
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            <div class="outlet-actions">
-                                <button class="action-btn btn-edit" onclick="editOutlet({{ $outlet->id }})">
-                                    <i class="bi bi-pencil-square"></i>
-                                    <span>Edit</span>
-                                </button>
-                                <button class="action-btn btn-delete" onclick="deleteOutlet({{ $outlet->id }}, '{{ addslashes($outlet->nama) }}')">
-                                    <i class="bi bi-trash3"></i>
-                                    <span>Hapus</span>
-                                </button>
-                            </div>
+            @if ($loop->first)<div class="ui-menu">@endif
+                <div class="ui-menu__item">
+                    <div class="ui-menu__icon ui-icon--teal"><i class="bi bi-shop"></i></div>
+                    <div class="ui-menu__text">
+                        <strong>{{ $outlet->nama }}</strong>
+                        <span>{{ $outlet->alamat }}</span>
+                        <div class="mt-1 d-flex flex-wrap gap-1">
+                            <span class="ui-chip ui-chip--sky">
+                                <i class="bi bi-lightning-charge"></i>
+                                Listrik Rp {{ number_format($outlet->biaya_listrik_harian ?? 0, 0, ',', '.') }}/hari
+                            </span>
+                            @forelse ($outlet->pegawais as $pegawai)
+                                <span class="ui-chip ui-chip--amber">{{ $pegawai->nama }}</span>
+                            @empty
+                                <span class="ui-chip">Belum ada pegawai</span>
+                            @endforelse
                         </div>
                     </div>
+                    <div class="ui-menu__actions">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editOutlet({{ $outlet->id }})">Edit</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteOutlet({{ $outlet->id }}, '{{ addslashes($outlet->nama) }}')">Hapus</button>
+                    </div>
                 </div>
-            </div>
+            @if ($loop->last)</div>@endif
         @empty
-            <div class="col-12">
-                <div class="empty-state">
-                    <i class="bi bi-shop"></i>
-                    <h6>Belum Ada Data Outlet</h6>
-                    <p>Klik tombol "Tambah Outlet Baru" untuk menambahkan outlet pertama.</p>
-                </div>
+            <div class="ui-empty">
+                <i class="bi bi-shop"></i>
+                <p class="mb-0">Belum ada data outlet. Klik "Tambah Outlet" untuk menambahkan.</p>
             </div>
         @endforelse
-    </div>
+    </section>
 </div>
 
 <!-- Modal Tambah/Edit Outlet -->
@@ -572,6 +85,11 @@
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Alamat</label>
                         <textarea class="form-control" id="alamat" name="alamat" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="biaya_listrik_harian" class="form-label">Biaya Listrik per Hari (Rp)</label>
+                        <input type="number" class="form-control" id="biaya_listrik_harian" name="biaya_listrik_harian" min="0" step="1000" value="0" required>
+                        <small class="form-text text-muted">Nominal ini ditagihkan setiap kali operasional outlet dimulai.</small>
                     </div>
                     <div class="mb-3">
                         <label for="pegawai_ids" class="form-label">Pegawai</label>
@@ -627,6 +145,7 @@
             }
             document.getElementById('nama').value = data.nama;
             document.getElementById('alamat').value = data.alamat;
+            document.getElementById('biaya_listrik_harian').value = data.biaya_listrik_harian ?? 0;
             // Set selected pegawai
             const pegawaiSelect = document.getElementById('pegawai_ids');
             Array.from(pegawaiSelect.options).forEach(option => {

@@ -5,252 +5,120 @@
 @section('css')
 <style>
     body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
+        background:
+            radial-gradient(1200px 500px at 10% -10%, rgba(87, 70, 235, 0.16), transparent 55%),
+            radial-gradient(900px 400px at 100% 0%, rgba(61, 47, 196, 0.12), transparent 50%),
+            #f5f6fa;
     }
-    
-    .login-container {
-        max-width: 450px;
+
+    .login-wrap {
+        max-width: 420px;
         margin: 0 auto;
-        padding: 2rem 1rem;
-        min-height: calc(100vh - 70px);
+        min-height: calc(100vh - 90px);
         display: flex;
         align-items: center;
-        justify-content: center;
+        padding: 1.5rem 0.5rem;
     }
-    
+
     .login-card {
-        background: white;
-        border-radius: var(--border-radius);
-        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        width: 100%;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 18px;
         overflow: hidden;
-        width: 100%;
-        border: none;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
     }
-    
-    .login-header {
-        background: var(--primary-gradient);
-        color: white;
-        padding: 2rem;
+
+    .login-card__top {
+        padding: 1.75rem 1.5rem 1.25rem;
         text-align: center;
+        border-bottom: 1px solid #f0f1f4;
     }
-    
-    .login-title {
-        font-size: 1.75rem;
-        font-weight: 600;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
+
+    .login-card__logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        overflow: hidden;
+        margin: 0 auto 0.9rem;
+        box-shadow: 0 8px 20px rgba(87, 70, 235, 0.25);
     }
-    
-    .login-subtitle {
-        font-size: 0.95rem;
-        opacity: 0.9;
-        margin-top: 0.5rem;
-        margin-bottom: 0;
-    }
-    
-    .login-body {
-        padding: 2rem;
-    }
-    
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-    
-    .form-label {
-        font-weight: 600;
-        color: var(--dark-color);
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .form-control {
-        padding: 1rem;
-        font-size: 1rem;
-        border: 2px solid #e1e5e9;
-        border-radius: var(--border-radius-sm);
-        transition: all 0.3s ease;
-        background: #f8f9fa;
-    }
-    
-    .form-control:focus {
-        background: white;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        transform: translateY(-1px);
-    }
-    
-    .login-btn {
+
+    .login-card__logo img {
         width: 100%;
-        padding: 1rem 2rem;
-        font-size: 1.1rem;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .login-card__top h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+        letter-spacing: -0.02em;
+    }
+
+    .login-card__top p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.875rem;
+    }
+
+    .login-card__body {
+        padding: 1.5rem;
+    }
+
+    .login-submit {
+        width: 100%;
+        margin-top: 0.35rem;
+        padding: 0.85rem 1rem;
         font-weight: 600;
-        background: var(--primary-gradient);
-        color: white;
-        border: none;
-        border-radius: var(--border-radius-sm);
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        margin-top: 1rem;
-    }
-    
-    .login-btn:hover {
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-    }
-    
-    .login-btn:active {
-        transform: translateY(0);
-    }
-    
-    .alert {
-        border-radius: var(--border-radius-sm);
-        border: none;
-        padding: 1rem 1.25rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .alert-success {
-        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-        color: #155724;
-    }
-    
-    .alert-danger {
-        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-        color: #721c24;
-    }
-    
-    .brand-logo {
-        width: 60px;
-        height: 60px;
-        background: rgba(255,255,255,0.2);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1rem;
-        font-size: 1.5rem;
-    }
-    
-    @media (max-width: 768px) {
-        .login-container {
-            padding: 1rem;
-            min-height: calc(100vh - 60px);
-        }
-        
-        .login-header {
-            padding: 1.5rem;
-        }
-        
-        .login-title {
-            font-size: 1.5rem;
-        }
-        
-        .login-body {
-            padding: 1.5rem;
-        }
-        
-        .form-control {
-            padding: 0.875rem;
-        }
-        
-        .login-btn {
-            padding: 0.875rem 1.5rem;
-            font-size: 1rem;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .login-container {
-            padding: 0.5rem;
-        }
-        
-        .login-header {
-            padding: 1rem;
-        }
-        
-        .login-title {
-            font-size: 1.25rem;
-        }
-        
-        .login-body {
-            padding: 1rem;
-        }
-        
-        .brand-logo {
-            width: 50px;
-            height: 50px;
-            font-size: 1.25rem;
-        }
     }
 </style>
 @endsection
 
 @section('content')
-<div class="login-container">
+<div class="login-wrap">
     <div class="login-card">
-        <div class="login-header">
-            <div class="brand-logo">
-                <i class="bi bi-shop"></i>
+        <div class="login-card__top">
+            <div class="login-card__logo">
+                <img src="{{ asset('logo.png') }}" alt="EdoBest">
             </div>
-            <h1 class="login-title">
-                EdoBest
-            </h1>
-            <p class="login-subtitle">Sistem Manajemen Donat Terbaik</p>
+            <h1>EdoBest</h1>
+            <p>Masuk untuk mengelola outlet</p>
         </div>
-        
-        <div class="login-body">
-            <!-- Alert Messages -->
+
+        <div class="login-card__body">
             @if (session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                    <span>{{ session('error') }}</span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-            
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>{{ session('success') }}</span>
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>{{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
-            <!-- Login Form -->
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-1"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
             <form action="{{ route('login.post') }}" method="POST">
                 @csrf
-                <div class="form-group">
-                    <label for="username" class="form-label">
-                        <i class="bi bi-person-fill"></i>
-                        Username
-                    </label>
-                    <input type="text" 
-                           class="form-control" 
-                           id="username" 
-                           name="username" 
-                           placeholder="Masukkan username Anda"
-                           required 
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text"
+                           class="form-control"
+                           id="username"
+                           name="username"
+                           placeholder="Masukkan username"
+                           required
                            autocomplete="username"
                            autofocus>
                 </div>
-                
-                <button type="submit" class="login-btn">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Masuk ke Sistem</span>
+
+                <button type="submit" class="btn btn-primary login-submit">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Masuk
                 </button>
             </form>
         </div>

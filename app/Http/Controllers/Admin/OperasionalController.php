@@ -52,11 +52,14 @@ class OperasionalController extends Controller
                 return redirect()->back();
             }
 
+            $outlet = Outlet::findOrFail($request->outlet_id);
+
             Operasional::create([
                 'outlet_id' => $request->outlet_id,
                 'tanggal' => Carbon::today()->toDateString(),
                 'status' => 'aktif',
                 'total_donat_harian' => 0,
+                'biaya_listrik' => (int) ($outlet->biaya_listrik_harian ?? 0),
             ]);
 
             Session::flash('success', 'Operasional berhasil dimulai.');

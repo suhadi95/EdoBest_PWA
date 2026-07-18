@@ -82,12 +82,19 @@
         }
 
         .total-highlight {
-            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
-            color: #0c5460;
+            background: #eef6ff;
+            color: #1e40af;
+            border: 1px solid #dbeafe;
             padding: 1rem;
             border-radius: var(--border-radius-sm);
             text-align: center;
             margin: 1rem 0;
+        }
+
+        .total-highlight--muted {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid var(--border);
         }
 
         .total-amount {
@@ -361,19 +368,21 @@
 @endsection
 
 @section('back-button')
-    <a href="javascript:history.back()" class="btn btn-outline-secondary mb-3"><i class="bi bi-arrow-left"></i> Kembali</a>
+    <a href="javascript:history.back()" class="ui-back"><i class="bi bi-arrow-left"></i> Kembali</a>
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <!-- Header -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <h4>{{ $outlet->nama }}</h4>
-                <p class="text-muted">Alamat: {{ $outlet->alamat }}</p>
-                <p class="text-muted">Tanggal: {{ \Carbon\Carbon::today()->format('d-m-Y') }}</p>
+    <div class="ui-page ui-page--wide">
+        <header class="ui-header">
+            <div>
+                <h1>{{ $outlet->nama }}</h1>
+                <p>{{ $outlet->alamat }}</p>
             </div>
-        </div>
+            <div class="ui-header__meta">
+                <strong>{{ \Carbon\Carbon::today()->format('d-m-Y') }}</strong>
+                Hari ini
+            </div>
+        </header>
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -388,39 +397,38 @@
             </div>
         @endif
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-
                         @if (!$operasional)
                             <!-- Operasional belum dimulai -->
-                            <div class="alert alert-info">Operasional belum dimulai hari ini.</div>
-                            <form action="{{ route('operasional.mulai') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="outlet_id" value="{{ $outlet->id }}">
-                                <button type="submit" class="btn btn-primary">Mulai Operasional</button>
-                            </form>
+                            <div class="ui-panel">
+                                <div class="alert alert-info mb-3">Operasional belum dimulai hari ini.</div>
+                                <form action="{{ route('operasional.mulai') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="outlet_id" value="{{ $outlet->id }}">
+                                    <button type="submit" class="btn btn-primary">Mulai Operasional</button>
+                                </form>
+                            </div>
                         @else
                             <!-- Operasional sudah aktif -->
-                            <p>Status:
-                                @php
-                                    if ($rekap && $rekap->status === 'validated') {
-                                        $statusText = 'Selesai';
-                                        $badgeClass = 'primary';
-                                    } else {
-                                        $statusText = ucfirst($operasional->status);
-                                        $badgeClass = $operasional->status === 'aktif' ? 'success' : 'danger';
-                                    }
-                                @endphp
-                                <span class="badge bg-{{ $badgeClass }}">{{ $statusText }}</span>
-                            </p>
+                            @php
+                                if ($rekap && $rekap->status === 'validated') {
+                                    $statusText = 'Selesai';
+                                    $chipClass = 'ui-chip--violet';
+                                } else {
+                                    $statusText = ucfirst($operasional->status);
+                                    $chipClass = $operasional->status === 'aktif' ? 'ui-chip--green' : 'ui-chip--rose';
+                                }
+                            @endphp
+                            <div class="ui-panel" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;">
+                                <span style="font-size:0.875rem;color:var(--muted);">Status operasional</span>
+                                <span class="ui-chip {{ $chipClass }}">{{ $statusText }}</span>
+                            </div>
 
                             <!-- Tabel Sisa Kemasan -->
-                            <h6>Sisa Kemasan</h6>
+                            <section class="ui-section">
+                            <h2 class="ui-section__title">Sisa Kemasan</h2>
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
-                                    <thead class="table-dark">
+                                    <thead>
                                         <tr>
                                             <th>Jenis Kemasan</th>
                                             <th>Jumlah</th>
@@ -458,6 +466,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            </section>
 
                             <!-- Tambah Kloter -->
                             @if ($operasional->status === 'aktif' && !$rekap)
@@ -467,10 +476,11 @@
                             @endif
 
                             <!-- Tabel Daftar Kloter -->
-                            <h6 style="margin-top: 1em">Daftar Kloter</h6>
+                            <section class="ui-section">
+                            <h2 class="ui-section__title">Daftar Kloter</h2>
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
-                                    <thead class="table-dark">
+                                    <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Jumlah Donat</th>
@@ -520,35 +530,41 @@
                                     </tbody>
                                 </table>
                             </div>
+                            </section>
 
                             <!-- Rekap Harian -->
                             @if ($rekap)
-                                <h6>Rekap Harian</h6>
-                                <p>Total Donat Terjual: {{ $rekap->total_donat_terjual }}</p>
-                                <p>Total Uang Penjualan: Rp
-                                    {{ number_format($rekap->total_uang_penjualan ?? $rekap->total_uang, 0, ',', '.') }}
-                                </p>
-                                <p>Total Pendapatan: Rp
-                                    {{ number_format($rekap->total_uang ?? $rekap->total_uang, 0, ',', '.') }}
-                                </p>
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#rekapModal">
+                                <section class="ui-section">
+                                <h2 class="ui-section__title">Rekap Harian</h2>
+                                <div class="ui-stats">
+                                    <div class="ui-stat">
+                                        <span>Donat terjual</span>
+                                        <strong>{{ $rekap->total_donat_terjual }}</strong>
+                                    </div>
+                                    <div class="ui-stat">
+                                        <span>Uang penjualan</span>
+                                        <strong>Rp {{ number_format($rekap->total_uang_penjualan ?? $rekap->total_uang, 0, ',', '.') }}</strong>
+                                    </div>
+                                    <div class="ui-stat">
+                                        <span>Total pendapatan</span>
+                                        <strong>Rp {{ number_format($rekap->total_uang ?? $rekap->total_uang, 0, ',', '.') }}</strong>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#rekapModal">
                                     <i class="bi bi-file-earmark-text me-2"></i>Lihat Rekap
                                 </button>
                                 @if ($rekap->status !== 'validated')
                                     <form action="{{ route('admin.rekap.validasi', [$outlet->id, $rekap->id]) }}" method="POST"
                                         style="display: inline; margin-left: 10px;">
                                         @csrf
-                                        <button type="submit" class="btn btn-success btn-sm">
+                                        <button type="submit" class="btn btn-primary btn-sm">
                                             <i class="bi bi-check-circle me-2"></i>Validasi Rekap
                                         </button>
                                     </form>
                                 @endif
+                                </section>
                             @endif
                         @endif
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Modal Tambah Kloter -->
         <div class="modal fade" id="kloterModal" tabindex="-1" aria-hidden="true">
@@ -1097,15 +1113,13 @@
                             </div>
 
                             <!-- Total Pendapatan Highlight -->
-                            <div class="total-highlight"
-                                style="background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); color: #0c5460;">
+                            <div class="total-highlight">
                                 <div class="total-amount">
                                     Rp {{ number_format($rekap->total_uang ?? 0, 0, ',', '.') }}
                                 </div>
                                 <div class="total-label">Total Pendapatan Hari Ini</div>
                             </div>
-                            <div class="total-highlight"
-                                style="background: linear-gradient(135deg,rgb(126, 126, 126) 0%,rgb(126, 126, 126) 100%); color:rgb(255, 255, 255);">
+                            <div class="total-highlight total-highlight--muted">
                                 @php $cashHighlight = $rekap->cash_di_pegawai ?? ($cashPegawai ?? ($rekap->total_tunai ?? 0)); @endphp
                                 <div class="total-amount">
                                     Rp {{ number_format($cashHighlight, 0, ',', '.') }}
@@ -1139,7 +1153,7 @@
                             <h6>Detail Items</h6>
                             <div class="table-responsive">
                                 <table class="table table-striped">
-                                    <thead class="table-dark">
+                                    <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Kemasan</th>
@@ -1176,7 +1190,7 @@
                                         @endforelse
                                     </tbody>
                                     @if (count($transaksi->items) > 0)
-                                        <tfoot class="table-dark">
+                                        <tfoot class="table-light">
                                             <tr>
                                                 <th colspan="2">Total</th>
                                                 <th>{{ $totalJumlah }}</th>
@@ -1197,4 +1211,5 @@
             </div>
         @empty
         @endforelse
+    </div>
 @endsection

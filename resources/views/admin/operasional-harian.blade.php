@@ -2,31 +2,14 @@
 
 @section('title', 'Operasional Harian')
 
-@section('css')
-<style>
-    .card {
-        margin-bottom: 1rem;
-    }
-    .card-body p {
-        margin-bottom: 0.5rem;
-    }
-    @media (max-width: 576px) {
-        .card-body {
-            padding: 1rem;
-        }
-    }
-</style>
-@endsection
-
 @section('content')
-<div class="container-fluid">
-    <!-- Header -->
-    <div class="row mb-3">
-        <div class="col-12">
-            <h4>Operasional Harian</h4>
-            <p class="text-muted">Pilih outlet untuk melihat detail operasional</p>
+<div class="ui-page">
+    <header class="ui-header">
+        <div>
+            <h1>Operasional Harian</h1>
+            <p>Pilih outlet</p>
         </div>
-    </div>
+    </header>
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -41,61 +24,52 @@
         </div>
     @endif
 
-    <!-- Daftar Outlet -->
-    <div class="row">
-        @forelse ($outlets as $outlet)
-            <div class="col-12 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="card-title mb-1">{{ $outlet->nama }}</h6>
-                                <p class="card-text small mb-1">Alamat: {{ $outlet->alamat }}</p>
-                                <p class="card-text small mb-1">
-                                    <strong>Status:</strong>
-                                    @php
-                                        $operasional = $outlet->operasionals->first();
-                                        if ($operasional) {
-                                            $rekap = $operasional->rekap;
-                                            if ($rekap && $rekap->status === 'validated') {
-                                                $statusText = 'Selesai';
-                                                $badgeClass = 'primary';
-                                            } else {
-                                                $statusText = ucfirst($operasional->status);
-                                                $badgeClass = $operasional->status === 'aktif' ? 'success' : 'danger';
-                                            }
-                                        } else {
-                                            $statusText = 'Tutup';
-                                            $badgeClass = 'danger';
-                                        }
-                                    @endphp
-                                    <span class="badge bg-{{ $badgeClass }}">{{ $statusText }}</span>
-                                </p>
-                                @if(isset($rekap))
-                                @php
-                                    $cashInfo = $rekap->cash_di_pegawai ?? ($rekap->total_tunai ?? 0);
-                                @endphp
-                                <p class="card-text small mb-1">
-                                    <strong>Cash di Pegawai:</strong> Rp {{ number_format($cashInfo, 0, ',', '.') }}
-                                </p>
+    <section class="ui-section">
+        <h2 class="ui-section__title">Daftar Outlet</h2>
+
+        @if ($outlets->isNotEmpty())
+            <div class="ui-menu">
+                @foreach ($outlets as $outlet)
+                    @php
+                        $operasional = $outlet->operasionals->first();
+                        $rekap = null;
+                        if ($operasional) {
+                            $rekap = $operasional->rekap;
+                            if ($rekap && $rekap->status === 'validated') {
+                                $statusText = 'Selesai';
+                                $chipClass = 'ui-chip--violet';
+                            } else {
+                                $statusText = ucfirst($operasional->status);
+                                $chipClass = $operasional->status === 'aktif' ? 'ui-chip--green' : 'ui-chip--rose';
+                            }
+                        } else {
+                            $statusText = 'Tutup';
+                            $chipClass = 'ui-chip--rose';
+                        }
+                        $cashInfo = $rekap ? ($rekap->cash_di_pegawai ?? ($rekap->total_tunai ?? 0)) : null;
+                    @endphp
+                    <a href="{{ route('operasional.detail', $outlet->id) }}" class="ui-menu__item">
+                        <div class="ui-menu__icon ui-icon--teal"><i class="bi bi-shop"></i></div>
+                        <div class="ui-menu__text">
+                            <strong>{{ $outlet->nama }}</strong>
+                            <span>
+                                {{ $outlet->alamat }}
+                                · <span class="ui-chip {{ $chipClass }}">{{ $statusText }}</span>
+                                @if($cashInfo !== null)
+                                    · Cash di Pegawai: Rp {{ number_format($cashInfo, 0, ',', '.') }}
                                 @endif
-                            </div>
-                            <a href="{{ route('operasional.detail', $outlet->id) }}" class="btn btn-primary btn-lg">
-                                <i class="bi bi-eye fs-4 me-2"></i>
-                                <strong>Lihat Detail</strong>
-                            </a>
+                            </span>
                         </div>
-                    </div>
-                </div>
+                        <i class="bi bi-chevron-right ui-menu__chevron"></i>
+                    </a>
+                @endforeach
             </div>
-        @empty
-            <div class="col-12">
-                <div class="text-center py-5">
-                    <i class="bi bi-shop display-1 text-muted"></i>
-                    <p class="mt-3 text-muted">Belum ada outlet.</p>
-                </div>
+        @else
+            <div class="ui-empty">
+                <i class="bi bi-shop"></i>
+                <p>Belum ada outlet.</p>
             </div>
-        @endforelse
-    </div>
+        @endif
+    </section>
 </div>
 @endsection

@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Outlet extends Model
 {
     protected $table = 'outlets';
-    protected $fillable = ['nama', 'alamat'];
+    protected $fillable = ['nama', 'alamat', 'biaya_listrik_harian'];
+
+    protected $casts = [
+        'biaya_listrik_harian' => 'integer',
+    ];
 
     public function pegawais()
     {
@@ -17,6 +21,11 @@ class Outlet extends Model
     public function operasionals()
     {
         return $this->hasMany(Operasional::class);
+    }
+
+    public function listrikPembayarans()
+    {
+        return $this->hasMany(ListrikPembayaran::class);
     }
 
     public function stokOutlet()

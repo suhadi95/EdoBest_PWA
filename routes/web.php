@@ -14,6 +14,7 @@ use App\Http\Controllers\Pegawai\RekapController;
 use App\Http\Controllers\Admin\PenggajianController;
 use App\Http\Controllers\Admin\KasbonController as AdminKasbonController;
 use App\Http\Controllers\Pegawai\KasbonController as PegawaiKasbonController;
+use App\Http\Controllers\Pegawai\ListrikController;
 
 // Route untuk login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -125,4 +126,8 @@ Route::prefix('pegawai')->middleware(['auth', 'role:pegawai'])->group(function (
     Route::get('/kasbon', [PegawaiKasbonController::class, 'index'])->name('pegawai.kasbon.index');
     Route::post('/kasbon', [PegawaiKasbonController::class, 'store'])->name('pegawai.kasbon.store');
     Route::delete('/kasbon/{id}', [PegawaiKasbonController::class, 'destroy'])->name('pegawai.kasbon.destroy');
+
+    // Catatan Listrik
+    Route::get('/listrik', [ListrikController::class, 'index'])->name('pegawai.listrik.index');
+    Route::post('/listrik/bayar', [ListrikController::class, 'bayar'])->name('pegawai.listrik.bayar');
 });

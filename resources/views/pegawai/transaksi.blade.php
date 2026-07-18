@@ -3,54 +3,26 @@
 @section('title', '{{ isset($transaksi) ? "Detail Transaksi" : "Transaksi Baru" }} - {{ $outlet->nama }}')
 
 @section('back-button')
-<div class="mb-3">
-    <a href="{{ route('pegawai.penjualan', $outlet->id) }}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left me-2"></i>Kembali ke Penjualan
-    </a>
-</div>
+<a class="ui-back" href="{{ route('pegawai.penjualan', $outlet->id) }}"><i class="bi bi-arrow-left"></i> Kembali ke Penjualan</a>
 @endsection
 
 @section('css')
 <style>
-    .transaksi-card {
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-    }
-    .outlet-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-    .outlet-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-    .outlet-address {
-        font-size: 0.9rem;
-        opacity: 0.9;
-    }
     .transaction-info {
-        background: #f8f9fa;
-        border-radius: 8px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--border-radius);
         padding: 1rem;
-        margin-bottom: 1.5rem;
-        border-left: 4px solid #198754;
-    }
-    .table-responsive {
-        border-radius: 8px;
-        overflow-x: auto;
+        margin-bottom: 1.15rem;
     }
     .btn-action {
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
     }
     .payment-methods {
-        background: #f8f9fa;
-        border-radius: 8px;
+        background: #f8f9fc;
+        border-radius: var(--border-radius-sm);
+        border: 1px solid var(--border);
         padding: 1rem;
         margin-bottom: 1rem;
     }
@@ -58,27 +30,21 @@
         display: inline-block;
         margin: 0.25rem;
         padding: 0.5rem 1rem;
-        border: 1px solid #dee2e6;
-        border-radius: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
         background: white;
         cursor: pointer;
         transition: all 0.2s;
     }
     .payment-option:hover {
-        background: #e9ecef;
+        background: #f3f4ff;
+        border-color: #c7c2f8;
     }
     .payment-option.selected {
-        background: #198754;
+        background: var(--brand);
         color: white;
-        border-color: #198754;
+        border-color: var(--brand);
     }
-    .form-floating > label {
-        padding: 1rem 0.75rem;
-    }
-    .form-floating > .form-control {
-        padding: 1rem 0.75rem;
-    }
-    /* Tambahan CSS untuk tombol tambah menempel di bawah */
     .fixed-bottom-btn-container {
         position: fixed;
         bottom: 0;
@@ -86,26 +52,16 @@
         width: 100%;
         background: white;
         padding: 0.75rem 1rem;
-        box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 -2px 8px rgba(15, 23, 42, 0.08);
         z-index: 1050;
         text-align: center;
     }
-    /* Padding bawah untuk mobile agar konten tidak tertutupi */
     @media (max-width: 768px) {
         body {
             padding-bottom: 80px;
         }
     }
     @media (max-width: 576px) {
-        .transaksi-card .card-body {
-            padding: 1rem;
-        }
-        .outlet-header {
-            padding: 1rem;
-        }
-        .outlet-title {
-            font-size: 1.1rem;
-        }
         .table-responsive {
             font-size: 0.85rem;
         }
@@ -126,8 +82,7 @@
 @endsection
 
 @section('content')
-<div class="container-fluid px-2 px-md-3">
-    <!-- Alert Messages -->
+<div class="ui-page ui-page--wide">
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
             {{ session('success') }}
@@ -141,18 +96,14 @@
         </div>
     @endif
 
-    <!-- Outlet Header -->
-    <div class="outlet-header">
-        <div class="outlet-title">
-            <i class="bi bi-cart-plus me-2"></i>{{ isset($transaksi) ? 'Detail Transaksi' : 'Transaksi Baru' }}
+    <header class="ui-header">
+        <div>
+            <h1>{{ isset($transaksi) ? 'Detail Transaksi' : 'Transaksi Baru' }}</h1>
+            <p>{{ $outlet->nama }} · {{ $outlet->alamat }}</p>
         </div>
-        <div class="outlet-address">
-            <i class="bi bi-shop me-1"></i>{{ $outlet->nama }} • <i class="bi bi-geo-alt me-1"></i>{{ $outlet->alamat }}
-        </div>
-    </div>
+    </header>
 
     @if ($operasional || isset($transaksi))
-        <!-- Transaction Info -->
         <div class="transaction-info">
             <div class="row align-items-center">
                 <div class="col-md-6">
@@ -167,7 +118,7 @@
                 </div>
                 @if(isset($transaksi))
                     <div class="col-md-6 text-md-end">
-                        <span class="badge bg-secondary fs-6">
+                        <span class="ui-chip ui-chip--sky">
                             <i class="bi bi-credit-card me-1"></i>{{ ucfirst($transaksi->metode_pembayaran) }}
                         </span>
                     </div>
@@ -175,20 +126,18 @@
             </div>
         </div>
 
-        <!-- Items Table -->
-        <div class="transaksi-card card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="card-title mb-0">
-                        <i class="bi bi-list-ul me-2"></i>Detail Item Transaksi
-                    </h6>
-                    @if (!isset($transaksi) && !empty($tempItems))
-                        <button class="btn btn-outline-danger btn-sm" onclick="hapusSemuaItem()">
-                            <i class="bi bi-trash me-1"></i>Hapus Semua
-                        </button>
-                    @endif
-                </div>
+        <section class="ui-section">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="ui-section__title mb-0">Detail Item Transaksi</h2>
+                @if (!isset($transaksi) && !empty($tempItems))
+                    <button class="btn btn-outline-danger btn-sm" onclick="hapusSemuaItem()">
+                        <i class="bi bi-trash me-1"></i>Hapus Semua
+                    </button>
+                @endif
+            </div>
 
+        <div class="ui-panel" style="padding:0; overflow:hidden;">
+            <div class="card-body" style="padding:1rem;">
                 @php
                     $donatPerItem = [
                         'mika' => 1,
@@ -298,97 +247,79 @@
 
             </div>
         </div>
+        </section>
 
         @if(count($items) > 0)
-            <!-- Summary Cards -->
-            <div class="row mt-3">
-                <div class="col-6">
-                    <div class="card transaksi-card">
-                        <div class="card-body text-center">
-                            <i class="bi bi-bullseye text-info" style="font-size: 2rem;"></i>
-                            <h5 class="card-title mt-2">Total Donat</h5>
-                            <h3 class="text-info fw-bold">
-                                {{ collect($items)->sum(function($item) use ($donatPerItem) { 
-                                    $jumlah = is_array($item) ? $item['jumlah'] : $item->jumlah;
-                                    $kemasan = is_array($item) ? $item['kemasan'] : $item->kemasan;
-                                    return $jumlah * ($donatPerItem[$kemasan] ?? 0); 
-                                }) }}
-                            </h3>
-                        </div>
-                    </div>
+            <div class="ui-stats">
+                <div class="ui-stat">
+                    <span>Total Donat</span>
+                    <strong>
+                        {{ collect($items)->sum(function($item) use ($donatPerItem) {
+                            $jumlah = is_array($item) ? $item['jumlah'] : $item->jumlah;
+                            $kemasan = is_array($item) ? $item['kemasan'] : $item->kemasan;
+                            return $jumlah * ($donatPerItem[$kemasan] ?? 0);
+                        }) }}
+                    </strong>
                 </div>
-                <div class="col-6">
-                    <div class="card transaksi-card">
-                        <div class="card-body text-center">
-                            <i class="bi bi-cash text-success" style="font-size: 2rem;"></i>
-                            <h5 class="card-title mt-2">Total Biaya</h5>
-                            <h3 class="text-success fw-bold">
-                                Rp {{ number_format(collect($items)->sum(function($item) { 
-                                    return is_array($item) ? $item['subtotal'] : $item->subtotal; 
-                                }), 0, ',', '.') }}
-                            </h3>
-                        </div>
-                    </div>
+                <div class="ui-stat">
+                    <span>Total Biaya</span>
+                    <strong>
+                        Rp {{ number_format(collect($items)->sum(function($item) {
+                            return is_array($item) ? $item['subtotal'] : $item->subtotal;
+                        }), 0, ',', '.') }}
+                    </strong>
                 </div>
             </div>
         @endif
 
         @if (!isset($transaksi) && !empty($tempItems))
-            <!-- Payment Method Selection -->
-            <div class="transaksi-card card">
-                <div class="card-body">
-                    <h6 class="card-title mb-3">
-                        <i class="bi bi-credit-card me-2"></i>Pilih Metode Pembayaran
-                    </h6>
-                    <form id="paymentForm" action="{{ route('pegawai.simpan-transaksi') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="outlet_id" value="{{ $outlet->id }}">
-                        <input type="hidden" name="operasional_id" value="{{ $operasional->id }}">
+            <div class="ui-panel">
+                <h2 class="ui-section__title">Pilih Metode Pembayaran</h2>
+                <form id="paymentForm" action="{{ route('pegawai.simpan-transaksi') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="outlet_id" value="{{ $outlet->id }}">
+                    <input type="hidden" name="operasional_id" value="{{ $operasional->id }}">
 
-                        <div class="payment-methods">
-                            <!-- Metode Pembayaran Atas -->
-                            <div class="d-flex justify-content-center mb-2">
-                                <div class="btn-group" role="group" aria-label="Metode Pembayaran Atas">
-                                    <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeTunai" value="tunai" autocomplete="off" checked required>
-                                    <label class="btn btn-outline-success" for="metodeTunai">
-                                        <i class="bi bi-cash me-1"></i>Tunai
-                                    </label>
+                    <div class="payment-methods">
+                        <div class="d-flex justify-content-center mb-2">
+                            <div class="btn-group" role="group" aria-label="Metode Pembayaran Atas">
+                                <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeTunai" value="tunai" autocomplete="off" checked required>
+                                <label class="btn btn-outline-primary" for="metodeTunai">
+                                    <i class="bi bi-cash me-1"></i>Tunai
+                                </label>
 
-                                    <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeQris" value="qris" autocomplete="off">
-                                    <label class="btn btn-outline-success" for="metodeQris">
-                                        <i class="bi bi-qr-code me-1"></i>QRIS
-                                    </label>
+                                <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeQris" value="qris" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="metodeQris">
+                                    <i class="bi bi-qr-code me-1"></i>QRIS
+                                </label>
 
-                                    <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeTransfer" value="transfer" autocomplete="off">
-                                    <label class="btn btn-outline-success" for="metodeTransfer">
-                                        <i class="bi bi-bank me-1"></i>Transfer
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- Metode Pembayaran Bawah -->
-                            <div class="d-flex justify-content-center">
-                                <div class="btn-group" role="group" aria-label="Metode Pembayaran Bawah">
-
-                                    <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeGrabfood" value="grabfood" autocomplete="off">
-                                    <label class="btn btn-outline-success" for="metodeGrabfood">
-                                        <i class="bi bi-scooter me-1"></i>Grabfood
-                                    </label>
-
-                                    <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeGofood" value="gofood" autocomplete="off">
-                                    <label class="btn btn-outline-success" for="metodeGofood">
-                                        <i class="bi bi-scooter me-1"></i>Gofood
-                                    </label>
-                                </div>
+                                <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeTransfer" value="transfer" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="metodeTransfer">
+                                    <i class="bi bi-bank me-1"></i>Transfer
+                                </label>
                             </div>
                         </div>
+                        <div class="d-flex justify-content-center">
+                            <div class="btn-group" role="group" aria-label="Metode Pembayaran Bawah">
+                                <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeGrabfood" value="grabfood" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="metodeGrabfood">
+                                    <i class="bi bi-scooter me-1"></i>Grabfood
+                                </label>
 
-                        <div class="text-center mt-3">
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <i class="bi bi-check-circle me-2"></i>Simpan Transaksi
-                            </button>
+                                <input type="radio" class="btn-check" name="metode_pembayaran" id="metodeGofood" value="gofood" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="metodeGofood">
+                                    <i class="bi bi-scooter me-1"></i>Gofood
+                                </label>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Simpan Transaksi
+                        </button>
+                    </div>
+                </form>
             </div>
         @endif
     @endif

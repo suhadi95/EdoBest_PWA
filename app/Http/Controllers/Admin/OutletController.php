@@ -32,6 +32,7 @@ class OutletController extends Controller
             $request->validate([
                 'nama' => 'required|string|max:255|unique:outlets,nama',
                 'alamat' => 'required|string',
+                'biaya_listrik_harian' => 'nullable|integer|min:0',
                 'pegawai_ids' => 'nullable|array',
                 'pegawai_ids.*' => 'exists:pegawais,id',
             ]);
@@ -39,6 +40,7 @@ class OutletController extends Controller
             $outlet = Outlet::create([
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
+                'biaya_listrik_harian' => (int) ($request->biaya_listrik_harian ?? 0),
             ]);
 
             if ($request->pegawai_ids) {
@@ -78,6 +80,7 @@ class OutletController extends Controller
             $request->validate([
                 'nama' => 'required|string|max:255|unique:outlets,nama,' . $id,
                 'alamat' => 'required|string',
+                'biaya_listrik_harian' => 'nullable|integer|min:0',
                 'pegawai_ids' => 'nullable|array',
                 'pegawai_ids.*' => 'exists:pegawais,id',
             ]);
@@ -85,6 +88,7 @@ class OutletController extends Controller
             $outlet->update([
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
+                'biaya_listrik_harian' => (int) ($request->biaya_listrik_harian ?? 0),
             ]);
 
             Pegawai::whereIn('id', $request->pegawai_ids ?: [])->update(['outlet_id' => $outlet->id]);

@@ -24,6 +24,21 @@ class PegawaiDashboardController extends Controller
             }, 'operasionals.rekap'])
             ->first();
 
-        return view('pegawai.dashboard', compact('outlet'));
+        $listrikHariBelumBayar = 0;
+        $listrikTotalTagihan = 0;
+        if ($outlet) {
+            $listrikQuery = Operasional::where('outlet_id', $outlet->id)
+                ->whereNull('listrik_pembayaran_id')
+                ->where('biaya_listrik', '>', 0);
+
+            $listrikHariBelumBayar = (clone $listrikQuery)->count();
+            $listrikTotalTagihan = (int) (clone $listrikQuery)->sum('biaya_listrik');
+        }
+
+        return view('pegawai.dashboard', compact(
+            'outlet',
+            'listrikHariBelumBayar',
+            'listrikTotalTagihan'
+        ));
     }
 }

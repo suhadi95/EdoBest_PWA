@@ -78,24 +78,22 @@
     }
 
     .pagination-wrapper .page-link:hover {
-        color: #198754;
-        background-color: #f8f9fa;
-        border-color: #198754;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 6px rgba(25, 135, 84, 0.15);
+        color: var(--brand);
+        background-color: #f3f4ff;
+        border-color: #c7c2f8;
     }
 
     .pagination-wrapper .page-item.active .page-link {
         color: #ffffff;
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        border-color: #198754;
+        background: var(--brand);
+        border-color: var(--brand);
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(25, 135, 84, 0.25);
+        box-shadow: none;
     }
 
     .pagination-wrapper .page-item.active .page-link:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 3px 10px rgba(25, 135, 84, 0.3);
+        background: var(--brand-dark);
+        border-color: var(--brand-dark);
     }
 
     .pagination-wrapper .page-item.disabled .page-link {
@@ -528,17 +526,21 @@ $(document).ready(function() {
 @endsection
 
 @section('back-button')
-<a href="javascript:history.back()" class="btn btn-outline-secondary mb-3"><i class="bi bi-arrow-left"></i> Kembali</a>
+<a href="javascript:history.back()" class="ui-back"><i class="bi bi-arrow-left"></i> Kembali</a>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="card-title mb-0"><i class="bi bi-person-circle me-2"></i>Detail Penggajian - {{ $pegawai->nama }}</h5>
-                </div>
+<div class="ui-page ui-page--wide">
+    <header class="ui-header">
+        <div>
+            <h1>Detail Penggajian</h1>
+            <p>{{ $pegawai->nama }}</p>
+        </div>
+        <div class="ui-header__meta">
+            <strong>{{ $pegawai->outlet->nama ?? 'Belum ditugaskan' }}</strong>
+            Outlet
+        </div>
+    </header>
 
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -557,10 +559,9 @@ $(document).ready(function() {
                 <!-- Info Pegawai -->
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Informasi Pegawai</h6>
-                                <table class="table table-sm">
+                        <div class="ui-panel">
+                                <h2 class="ui-section__title">Informasi Pegawai</h2>
+                                <table class="table table-sm mb-0">
                                     <tr>
                                         <td><strong>Nama:</strong></td>
                                         <td>{{ $pegawai->nama }}</td>
@@ -570,14 +571,12 @@ $(document).ready(function() {
                                         <td>{{ $pegawai->outlet->nama ?? 'Belum ditugaskan' }}</td>
                                     </tr>
                                 </table>
-                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Target Penjualan</h6>
-                                <table class="table table-sm">
+                        <div class="ui-panel">
+                                <h2 class="ui-section__title">Target Penjualan</h2>
+                                <table class="table table-sm mb-0">
                                     <tr>
                                         <td><strong>Target 1:</strong></td>
                                         <td>{{ $pegawai->target_1 }} donat</td>
@@ -611,7 +610,6 @@ $(document).ready(function() {
                                         <td>Rp {{ number_format($pegawai->tambahan_gaji_4, 0, ',', '.') }}</td>
                                     </tr>
                                 </table>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -619,9 +617,8 @@ $(document).ready(function() {
                 <!-- Form Periode Penggajian -->
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Atur Periode Penggajian</h6>
+                        <div class="ui-panel">
+                                <h2 class="ui-section__title">Atur Periode Penggajian</h2>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label for="tanggal-mulai" class="form-label">Tanggal Mulai</label>
@@ -638,20 +635,18 @@ $(document).ready(function() {
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12">
-                                        <button type="button" class="btn btn-info" id="hitung-ulang">
+                                        <button type="button" class="btn btn-outline-primary" id="hitung-ulang">
                                             <i class="bi bi-calculator"></i> Hitung Ulang Gaji
                                         </button>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Kalkulasi Gaji</h6>
+                        <div class="ui-panel">
+                                <h2 class="ui-section__title">Kalkulasi Gaji</h2>
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         <div class="alert alert-info">
@@ -908,13 +903,12 @@ $(document).ready(function() {
                                         <div class="gaji-total">
                                             <h4>Gaji Bersih</h4>
                                             <h2 id="gaji-total">Rp {{ number_format($gajiBersih, 0, ',', '.') }}</h2>
-                                            <button class="btn btn-success mt-3" id="validate-gaji" {{ $gajiBersih <= 0 ? 'disabled' : '' }}>
+                                            <button class="btn btn-primary mt-3" id="validate-gaji" {{ $gajiBersih <= 0 ? 'disabled' : '' }}>
                                                 <i class="bi bi-check-circle"></i> Validasi Gaji
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -922,9 +916,8 @@ $(document).ready(function() {
                 <!-- Histori Gaji -->
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Histori Gaji</h6>
+                        <div class="ui-panel">
+                                <h2 class="ui-section__title">Histori Gaji</h2>
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -1015,13 +1008,9 @@ $(document).ready(function() {
                                     </nav>
                                 </div>
                                 @endif
-                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 

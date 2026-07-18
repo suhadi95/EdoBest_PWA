@@ -15,15 +15,23 @@ class Operasional extends Model
         'tanggal',
         'status',
         'total_donat_harian',
+        'biaya_listrik',
+        'listrik_pembayaran_id',
     ];
 
-    protected $dates = [
-        'tanggal',
+    protected $casts = [
+        'tanggal' => 'date',
+        'biaya_listrik' => 'integer',
     ];
 
     public function outlet()
     {
         return $this->belongsTo(Outlet::class);
+    }
+
+    public function listrikPembayaran()
+    {
+        return $this->belongsTo(ListrikPembayaran::class, 'listrik_pembayaran_id');
     }
 
     public function kloters()

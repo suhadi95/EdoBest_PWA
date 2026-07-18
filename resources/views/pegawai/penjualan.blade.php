@@ -4,81 +4,12 @@
 
 @section('css')
     <style>
-        .penjualan-card {
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
-        }
-
-        .total-highlight {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #1565c0;
-            padding: 1rem;
-            border-radius: var(--border-radius-sm);
-            text-align: center;
-            margin: 1rem 0;
-        }
-
-        .total-amount {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .outlet-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .outlet-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .outlet-address {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #198754;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: #6c757d;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
         .stok-info {
-            background: #f8f9fa;
-            border-radius: 8px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
             padding: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.15rem;
         }
 
         .stok-grid {
@@ -90,28 +21,23 @@
         .stok-item {
             text-align: center;
             padding: 0.5rem;
-            background: white;
-            border-radius: 6px;
-            border: 1px solid #dee2e6;
+            background: #f8f9fc;
+            border-radius: 8px;
+            border: 1px solid var(--border);
         }
 
         .stok-label {
-            font-size: 0.75rem;
-            color: #6c757d;
+            font-size: 0.72rem;
+            color: var(--muted);
             margin-bottom: 0.25rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.04em;
         }
 
         .stok-value {
             font-size: 1rem;
-            font-weight: 600;
-            color: #198754;
-        }
-
-        .table-responsive {
-            border-radius: 8px;
-            overflow-x: auto;
+            font-weight: 650;
+            color: var(--dark-color);
         }
 
         .btn-action {
@@ -119,7 +45,6 @@
             font-size: 0.8rem;
         }
 
-        /* Fixed bottom button container */
         .fixed-bottom-btn-container {
             position: fixed;
             bottom: 0;
@@ -127,12 +52,38 @@
             width: 100%;
             background: white;
             padding: 0.75rem 1rem;
-            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -2px 8px rgba(15, 23, 42, 0.08);
             z-index: 1050;
             text-align: center;
         }
 
-        /* Padding bawah untuk mobile agar konten tidak tertutupi */
+        .total-highlight {
+            background: #eef6ff;
+            color: #1e40af;
+            border: 1px solid #dbeafe;
+            padding: 1rem;
+            border-radius: var(--border-radius-sm);
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .total-highlight--muted {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid var(--border);
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .total-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding-bottom: 80px;
@@ -140,37 +91,14 @@
         }
 
         @media (max-width: 576px) {
-            .penjualan-card .card-body {
-                padding: 1rem;
-            }
-
-            .outlet-header {
-                padding: 1rem;
-            }
-
-            .outlet-title {
-                font-size: 1.1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.5rem;
-            }
-
-            .stat-card {
-                padding: 0.75rem;
-            }
-
-            .stat-value {
-                font-size: 1.25rem;
-            }
-
             .stok-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
 
             .table-responsive {
                 font-size: 0.85rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .btn-action {
@@ -178,7 +106,6 @@
                 padding: 0.2rem 0.4rem;
             }
 
-            /* Mobile responsive untuk kolom item */
             .table td:nth-child(2) {
                 max-width: 120px;
                 word-wrap: break-word;
@@ -195,18 +122,11 @@
                 line-height: 1.2;
             }
 
-            /* Memastikan tabel responsive di mobile */
-            .table-responsive {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
             .table {
                 min-width: 600px;
             }
         }
 
-        /* CSS untuk Modal Rekap Mobile */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -219,8 +139,7 @@
             border-radius: 8px;
             padding: 1rem;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--border);
         }
 
         .summary-value {
@@ -239,8 +158,7 @@
         .rekap-card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--border);
             margin-bottom: 1rem;
         }
 
@@ -256,7 +174,6 @@
             padding: 0.25em 0.5em;
         }
 
-        /* Mobile responsive untuk modal rekap */
         @media (max-width: 768px) {
             .modal-dialog {
                 margin: 0.5rem;
@@ -358,15 +275,8 @@
                 padding: 0.5rem;
             }
 
-            .section-title {
-                font-size: 1.5rem;
-                ;
-            }
-
             .table-responsive {
                 font-size: 0.75rem;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
             }
 
             .table th,
@@ -379,11 +289,6 @@
             .payment-method-badge {
                 font-size: 0.75rem;
                 padding: 0.1em 0.25em;
-            }
-
-            /* Optimasi khusus untuk tabel dengan banyak kolom */
-            .table {
-                min-width: 100%;
             }
 
             .table th:nth-child(1),
@@ -409,9 +314,12 @@
     </style>
 @endsection
 
+@section('back-button')
+    <a href="{{ route('pegawai.dashboard') }}" class="ui-back"><i class="bi bi-arrow-left"></i> Kembali</a>
+@endsection
+
 @section('content')
-    <div class="container-fluid px-2 px-md-3">
-        <!-- Alert Messages -->
+    <div class="ui-page ui-page--wide">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
                 {{ session('success') }}
@@ -425,99 +333,106 @@
             </div>
         @endif
 
-        <!-- Outlet Header -->
-        <div class="outlet-header">
-            <div class="outlet-title">
-                <i class="bi bi-shop me-2"></i>{{ $outlet->nama }}
-            </div>
-            <div class="outlet-address">
-                <i class="bi bi-geo-alt me-1"></i>{{ $outlet->alamat }}
+        <header class="ui-header">
+            <div>
+                <h1>{{ $outlet->nama }}</h1>
+                <p><i class="bi bi-geo-alt me-1"></i>{{ $outlet->alamat }}</p>
             </div>
             @if ($operasional)
-                <div class="mt-2">
-                    <span class="badge bg-success">
-                        <i class="bi bi-circle-fill me-1"></i>Operasional: {{ ucfirst($operasional->status) }}
+                <div class="ui-header__meta">
+                    <span class="ui-chip {{ $operasional->status === 'aktif' ? 'ui-chip--green' : 'ui-chip--rose' }}">
+                        {{ ucfirst($operasional->status) }}
                     </span>
                 </div>
             @endif
-        </div>
+        </header>
 
         @if ($operasional)
-            <!-- Statistics Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">{{ $totalKloter }}</div>
-                    <div class="stat-label">Total Kloter</div>
+            <div class="ui-stats">
+                <div class="ui-stat">
+                    <span>Total Kloter</span>
+                    <strong>{{ $totalKloter }}</strong>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">{{ $totalDonat }}</div>
-                    <div class="stat-label">Total Donat</div>
+                <div class="ui-stat">
+                    <span>Total Donat</span>
+                    <strong>{{ $totalDonat }}</strong>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">{{ $transaksis->sum('total_donat') }}</div>
-                    <div class="stat-label">Donat Terjual</div>
+                <div class="ui-stat">
+                    <span>Donat Terjual</span>
+                    <strong>{{ $transaksis->sum('total_donat') }}</strong>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">{{ $operasional->total_donat_harian }}</div>
-                    <div class="stat-label">Sisa Donat</div>
-                </div>
-            </div>
-
-            <!-- Stok Information -->
-            <div class="stok-info">
-                <h6 class="mb-3">
-                    <i class="bi bi-box-seam me-2"></i>Sisa Stok Kemasan
-                </h6>
-                <div class="stok-grid">
-                    <div class="stok-item">
-                        <div class="stok-label">Mika</div>
-                        <div class="stok-value">{{ $stokOutlet->stok_mika }}</div>
-                    </div>
-                    <div class="stok-item">
-                        <div class="stok-label">Dus 1</div>
-                        <div class="stok-value">{{ $stokOutlet->stok_dus1 }}</div>
-                    </div>
-                    <div class="stok-item">
-                        <div class="stok-label">Dus 2</div>
-                        <div class="stok-value">{{ $stokOutlet->stok_dus2 }}</div>
-                    </div>
-                    <div class="stok-item">
-                        <div class="stok-label">Dus 3</div>
-                        <div class="stok-value">{{ $stokOutlet->stok_dus3 }}</div>
-                    </div>
-                    <div class="stok-item">
-                        <div class="stok-label">Box</div>
-                        <div class="stok-value">{{ $stokOutlet->stok_box }}</div>
-                    </div>
-                    <div class="stok-item">
-                        <div class="stok-label">Box 12</div>
-                        <div class="stok-value">{{ $stokOutlet->stok_box12 }}</div>
-                    </div>
-                    <div class="stok-item">
-                        <div class="stok-label">Lilin</div>
-                        <div class="stok-value">{{ $stokOutlet->stok_lilin ?? 0 }}</div>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#kloterModal">
-                        <i class="bi bi-eye me-1"></i>Detail Kloter
-                    </button>
+                <div class="ui-stat">
+                    <span>Sisa Donat</span>
+                    <strong>{{ $operasional->total_donat_harian }}</strong>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
+            <section class="ui-section">
+                <h2 class="ui-section__title">Sisa Stok Kemasan</h2>
+                <div class="stok-info">
+                    <div class="stok-grid">
+                        <div class="stok-item">
+                            <div class="stok-label">Mika</div>
+                            <div class="stok-value">{{ $stokOutlet->stok_mika }}</div>
+                        </div>
+                        <div class="stok-item">
+                            <div class="stok-label">Dus 1</div>
+                            <div class="stok-value">{{ $stokOutlet->stok_dus1 }}</div>
+                        </div>
+                        <div class="stok-item">
+                            <div class="stok-label">Dus 2</div>
+                            <div class="stok-value">{{ $stokOutlet->stok_dus2 }}</div>
+                        </div>
+                        <div class="stok-item">
+                            <div class="stok-label">Dus 3</div>
+                            <div class="stok-value">{{ $stokOutlet->stok_dus3 }}</div>
+                        </div>
+                        <div class="stok-item">
+                            <div class="stok-label">Box</div>
+                            <div class="stok-value">{{ $stokOutlet->stok_box }}</div>
+                        </div>
+                        <div class="stok-item">
+                            <div class="stok-label">Box 12</div>
+                            <div class="stok-value">{{ $stokOutlet->stok_box12 }}</div>
+                        </div>
+                        <div class="stok-item">
+                            <div class="stok-label">Lilin</div>
+                            <div class="stok-value">{{ $stokOutlet->stok_lilin ?? 0 }}</div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kloterModal">
+                            <i class="bi bi-eye me-1"></i>Detail Kloter
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             @if ($rekap)
                 <div class="alert alert-info mb-3" role="alert">
                     <i class="bi bi-info-circle me-2"></i>Penjualan hari ini telah selesai dan Rekap telah dibuat.
                 </div>
                 <div class="mb-3">
-                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#rekapModal">
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#rekapModal">
                         <i class="bi bi-eye me-2"></i>Lihat Rekap
                     </button>
                 </div>
             @else
+                <a href="{{ route('pegawai.transaksi', $outlet->id) }}" class="ui-primary d-none d-md-flex">
+                    <div class="ui-primary__icon"><i class="bi bi-cart-plus"></i></div>
+                    <div class="ui-primary__body">
+                        <strong>Tambah Transaksi</strong>
+                        <span>Catat penjualan pelanggan</span>
+                    </div>
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+                <div class="mb-3 d-none d-md-block">
+                    <a href="{{ route('pegawai.rekap', $outlet->id) }}" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-file-earmark-text me-2"></i>Rekap Harian
+                    </a>
+                </div>
                 <div class="d-md-none mb-3">
-                    <a href="{{ route('pegawai.rekap', $outlet->id) }}" class="btn btn-warning w-100">
+                    <a href="{{ route('pegawai.rekap', $outlet->id) }}" class="btn btn-outline-primary w-100">
                         <i class="bi bi-file-earmark-text me-2"></i>Rekap Harian
                     </a>
                 </div>
@@ -526,27 +441,15 @@
                         <i class="bi bi-plus-circle me-2"></i>Tambah Transaksi
                     </a>
                 </div>
-                <div class="d-none d-md-flex justify-content-between mb-3">
-                    <a href="{{ route('pegawai.transaksi', $outlet->id) }}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle me-2"></i>Tambah Transaksi
-                    </a>
-                    <a href="{{ route('pegawai.rekap', $outlet->id) }}" class="btn btn-warning">
-                        <i class="bi bi-file-earmark-text me-2"></i>Rekap Harian
-                    </a>
-                </div>
             @endif
 
-            <!-- Transactions Table -->
-            <div class="penjualan-card card">
-                <div class="card-body">
-                    <h6 class="card-title mb-3">
-                        <i class="bi bi-receipt me-2"></i>Daftar Transaksi Hari Ini
-                    </h6>
+            <section class="ui-section">
+                <h2 class="ui-section__title">Daftar Transaksi Hari Ini</h2>
 
                     @if(count($transaksis) > 0)
                         <div class="table-responsive">
                             <table class="table table-hover">
-                                <thead class="table-light">
+                                <thead>
                                     <tr>
                                         <th>Transaksi</th>
                                         <th>Item</th>
@@ -652,8 +555,7 @@
                             <p class="text-muted">Transaksi hari ini akan muncul di sini.</p>
                         </div>
                     @endif
-                </div>
-            </div>
+            </section>
         @endif
     </div>
 
@@ -669,7 +571,7 @@
                     <h6>Daftar Kloter</h6>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
-                            <thead class="table-dark">
+                            <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Jumlah Donat</th>
@@ -701,7 +603,7 @@
                                     </tr>
                                 @endforelse
                                 @if ($kloters->count() > 0)
-                                    <tr class="table-dark">
+                                    <tr class="table-light">
                                         <td><strong>Total</strong></td>
                                         <td><strong>{{ $kloters->sum('jumlah_donat') }}</strong></td>
                                         <td><strong>{{ $kloters->sum('jumlah_mika') }}</strong></td>
@@ -1200,15 +1102,13 @@
                         </div>
 
                         <!-- Total Pendapatan Highlight -->
-                        <div class="total-highlight"
-                            style="background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); color: #0c5460;">
+                        <div class="total-highlight">
                             <div class="total-amount">
                                 Rp {{ number_format($rekap->total_uang ?? 0, 0, ',', '.') }}
                             </div>
                             <div class="total-label">Total Pendapatan Hari Ini</div>
                         </div>
-                        <div class="total-highlight"
-                            style="background: linear-gradient(135deg,rgb(126, 126, 126) 0%,rgb(126, 126, 126) 100%); color:rgb(255, 255, 255);">
+                        <div class="total-highlight total-highlight--muted">
                             @php
                                 $cashViewBottom = $rekap->cash_di_pegawai
                                     ?? (($rekap->total_tunai ?? 0) + ($rekap->operasional?->catatan_oprasional_sum_jumlah ?? 0));

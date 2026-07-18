@@ -2,86 +2,106 @@
 
 @section('title', 'Detail Kasbon Pegawai')
 
+@section('back-button')
+<a class="ui-back" href="{{ route('admin.kasbon.index') }}"><i class="bi bi-arrow-left"></i> Kembali</a>
+@endsection
+
 @section('content')
-<div class="container">
-    <h3>Kasbon Pegawai: {{ $pegawai->nama }}</h3>
+<div class="ui-page ui-page--wide">
+    <header class="ui-header">
+        <div>
+            <h1>Kasbon Pegawai</h1>
+            <p>{{ $pegawai->nama }}</p>
+        </div>
+    </header>
 
-    <h4>Pengajuan Kasbon</h4>
-    @if($pengajuanKasbon->count() > 0)
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Tanggal</th>
-                <th>Nominal</th>
-                <th>Keterangan</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($pengajuanKasbon as $kasbon)
-            <tr>
-                <td>{{ $kasbon->tanggal }}</td>
-                <td>Rp {{ number_format($kasbon->nominal) }}</td>
-                <td>{{ $kasbon->keterangan }}</td>
-                <td>
-                    <button class="btn btn-success btn-sm approve-btn" data-id="{{ $kasbon->id }}">Setujui</button>
-                    <button class="btn btn-danger btn-sm reject-btn" data-id="{{ $kasbon->id }}">Tolak</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    @else
-    <p>Tidak ada pengajuan kasbon.</p>
-    @endif
+    <section class="ui-section">
+        <h2 class="ui-section__title">Pengajuan Kasbon</h2>
+        @if($pengajuanKasbon->count() > 0)
+            <div class="ui-panel" style="padding:0; overflow:hidden;">
+                <div class="table-responsive" style="border:none; border-radius:0;">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nominal</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($pengajuanKasbon as $kasbon)
+                            <tr>
+                                <td>{{ $kasbon->tanggal }}</td>
+                                <td>Rp {{ number_format($kasbon->nominal) }}</td>
+                                <td>{{ $kasbon->keterangan }}</td>
+                                <td>
+                                    <button class="btn btn-outline-primary btn-sm approve-btn" data-id="{{ $kasbon->id }}">Setujui</button>
+                                    <button class="btn btn-outline-danger btn-sm reject-btn" data-id="{{ $kasbon->id }}">Tolak</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @else
+            <div class="ui-empty">
+                <i class="bi bi-inbox"></i>
+                <p>Tidak ada pengajuan kasbon.</p>
+            </div>
+        @endif
+    </section>
 
-    <h4>Histori Kasbon</h4>
-    @if($historiKasbon->count() > 0)
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Nominal</th>
-                    <th>Keterangan</th>
-                    <th>Status</th>
-                    <th>Status Pembayaran</th>
-                    <th>Tanggal Pengajuan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($historiKasbon as $kasbon)
-                <tr>
-                    <td>{{ \Carbon\Carbon::parse($kasbon->tanggal)->format('d/m/Y') }}</td>
-                    <td>Rp {{ number_format($kasbon->nominal, 0, ',', '.') }}</td>
-                    <td>{{ $kasbon->keterangan }}</td>
-                    <td>
-                        @if($kasbon->status == 'pending')
-                            <span class="badge bg-warning">Pending</span>
-                        @elseif($kasbon->status == 'approved')
-                            <span class="badge bg-success">Disetujui</span>
-                        @elseif($kasbon->status == 'rejected')
-                            <span class="badge bg-danger">Ditolak</span>
-                        @endif
-                    </td>
-                    <td>
-                        @if($kasbon->status_pembayaran == 'lunas')
-                            <span class="badge bg-success">Lunas</span>
-                        @else
-                            <span class="badge bg-warning">Belum Dibayar</span>
-                        @endif
-                    </td>
-                    <td>{{ $kasbon->created_at->format('d/m/Y H:i') }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @else
-    <p class="text-muted">Belum ada histori kasbon.</p>
-    @endif
-
-    <a href="{{ route('admin.kasbon.index') }}" class="btn btn-secondary">Kembali</a>
+    <section class="ui-section">
+        <h2 class="ui-section__title">Histori Kasbon</h2>
+        @if($historiKasbon->count() > 0)
+            <div class="ui-panel" style="padding:0; overflow:hidden;">
+                <div class="table-responsive" style="border:none; border-radius:0;">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nominal</th>
+                                <th>Keterangan</th>
+                                <th>Status</th>
+                                <th>Status Pembayaran</th>
+                                <th>Tanggal Pengajuan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($historiKasbon as $kasbon)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($kasbon->tanggal)->format('d/m/Y') }}</td>
+                                <td>Rp {{ number_format($kasbon->nominal, 0, ',', '.') }}</td>
+                                <td>{{ $kasbon->keterangan }}</td>
+                                <td>
+                                    @if($kasbon->status == 'pending')
+                                        <span class="ui-chip ui-chip--amber">Pending</span>
+                                    @elseif($kasbon->status == 'approved')
+                                        <span class="ui-chip ui-chip--green">Disetujui</span>
+                                    @elseif($kasbon->status == 'rejected')
+                                        <span class="ui-chip ui-chip--rose">Ditolak</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($kasbon->status_pembayaran == 'lunas')
+                                        <span class="ui-chip ui-chip--green">Lunas</span>
+                                    @else
+                                        <span class="ui-chip ui-chip--amber">Belum Dibayar</span>
+                                    @endif
+                                </td>
+                                <td>{{ $kasbon->created_at->format('d/m/Y H:i') }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @else
+            <p class="text-muted mb-0">Belum ada histori kasbon.</p>
+        @endif
+    </section>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
