@@ -13,8 +13,10 @@ use App\Http\Controllers\Pegawai\PenjualanController;
 use App\Http\Controllers\Pegawai\RekapController;
 use App\Http\Controllers\Admin\PenggajianController;
 use App\Http\Controllers\Admin\KasbonController as AdminKasbonController;
+use App\Http\Controllers\Admin\AiposSettingController;
 use App\Http\Controllers\Pegawai\KasbonController as PegawaiKasbonController;
 use App\Http\Controllers\Pegawai\ListrikController;
+use App\Http\Controllers\Pegawai\AiposController;
 
 // Route untuk login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -91,6 +93,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/kasbon/{pegawaiId}', [AdminKasbonController::class, 'showPegawaiKasbon'])->name('admin.kasbon.show');
     Route::post('/kasbon/{id}/approve', [AdminKasbonController::class, 'approveKasbon'])->name('admin.kasbon.approve');
     Route::post('/kasbon/{id}/reject', [AdminKasbonController::class, 'rejectKasbon'])->name('admin.kasbon.reject');
+
+    // Pengaturan AIPOS
+    Route::get('/aipos', [AiposSettingController::class, 'edit'])->name('admin.aipos.edit');
+    Route::put('/aipos', [AiposSettingController::class, 'update'])->name('admin.aipos.update');
 });
 
 use App\Http\Controllers\Pegawai\HistoriGajiController;
@@ -130,4 +136,7 @@ Route::prefix('pegawai')->middleware(['auth', 'role:pegawai'])->group(function (
     // Catatan Listrik
     Route::get('/listrik', [ListrikController::class, 'index'])->name('pegawai.listrik.index');
     Route::post('/listrik/bayar', [ListrikController::class, 'bayar'])->name('pegawai.listrik.bayar');
+
+    // Akses AIPOS
+    Route::get('/aipos', [AiposController::class, 'index'])->name('pegawai.aipos.index');
 });

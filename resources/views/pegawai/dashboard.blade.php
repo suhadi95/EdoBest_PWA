@@ -152,6 +152,15 @@
                     @endif
                 </a>
 
+                <a href="{{ route('pegawai.aipos.index') }}" class="ui-menu__item">
+                    <div class="ui-menu__icon ui-icon--sky"><i class="bi bi-qr-code"></i></div>
+                    <div class="ui-menu__text">
+                        <strong>Akses AIPOS</strong>
+                        <span>Buka & login untuk lihat transaksi QRIS</span>
+                    </div>
+                    <i class="bi bi-chevron-right ui-menu__chevron"></i>
+                </a>
+
                 <a href="{{ route('pegawai.histori-gaji.index') }}" class="ui-menu__item">
                     <div class="ui-menu__icon ui-icon--green"><i class="bi bi-receipt"></i></div>
                     <div class="ui-menu__text">

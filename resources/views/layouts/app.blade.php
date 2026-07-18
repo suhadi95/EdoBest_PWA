@@ -585,6 +585,8 @@
                                     <li><a class="dropdown-item" href="{{ route('penggajian.index') }}"><i class="bi bi-cash-stack me-2"></i>Penggajian</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin.kasbon.index') }}"><i class="bi bi-wallet2 me-2"></i>Kasbon</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin.rekap.index') }}"><i class="bi bi-file-earmark-text me-2"></i>Laporan Rekap</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.aipos.edit') }}"><i class="bi bi-qr-code me-2"></i>Pengaturan AIPOS</a></li>
                                 </ul>
                             </li>
                         @elseif (session('user')->role === 'pegawai')
@@ -602,6 +604,7 @@
                                     <li><a class="dropdown-item" href="{{ route('pegawai.histori-rekap.index') }}"><i class="bi bi-clock-history me-2"></i>Histori Rekap</a></li>
                                     <li><a class="dropdown-item" href="{{ route('pegawai.kasbon.index') }}"><i class="bi bi-wallet2 me-2"></i>Kasbon</a></li>
                                     <li><a class="dropdown-item" href="{{ route('pegawai.listrik.index') }}"><i class="bi bi-lightning-charge me-2"></i>Catatan Listrik</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('pegawai.aipos.index') }}"><i class="bi bi-qr-code me-2"></i>Akses AIPOS</a></li>
                                 </ul>
                             </li>
                         @endif

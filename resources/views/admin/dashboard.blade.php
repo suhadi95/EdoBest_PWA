@@ -94,6 +94,14 @@
                 </div>
                 <i class="bi bi-chevron-right ui-menu__chevron"></i>
             </a>
+            <a href="{{ route('admin.aipos.edit') }}" class="ui-menu__item">
+                <div class="ui-menu__icon ui-icon--sky"><i class="bi bi-qr-code"></i></div>
+                <div class="ui-menu__text">
+                    <strong>Pengaturan AIPOS</strong>
+                    <span>URL & kredensial login untuk pegawai</span>
+                </div>
+                <i class="bi bi-chevron-right ui-menu__chevron"></i>
+            </a>
         </div>
     </section>
 </div>

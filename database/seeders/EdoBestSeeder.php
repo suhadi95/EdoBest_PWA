@@ -27,17 +27,17 @@ class EdoBestSeeder extends Seeder
 
         // Data akun pegawai
         $Pegawai1 = Pegawai::updateOrCreate(
-            ['username' => 'putri'],
+            ['username' => 'suminih'],
             [
-                'nama' => 'Putri',
+                'nama' => 'Suminih',
                 'gaji_harian' => 65000,
                 'tambahan_gaji_1' => 5000,
                 'target_1' => 150,
-                'tambahan_gaji_2' => 10000,
+                'tambahan_gaji_2' => 5000,
                 'target_2' => 200,
-                'tambahan_gaji_3' => 10000,
+                'tambahan_gaji_3' => 5000,
                 'target_3' => 250,
-                'tambahan_gaji_4' => 10000,
+                'tambahan_gaji_4' => 5000,
                 'target_4' => 300,
                 'bonus_nominal' => 5000,
                 'bonus_syarat' => 100,
